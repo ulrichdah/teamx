@@ -1,0 +1,23 @@
+<div class="container">
+    <div>
+        <h1 class="header-item"> {{title}} </h1>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-label>Sigle du cours</mat-label>
+            <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto" #box (keyup.enter)="onEnter(box.value)">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{option.name}}
+            </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+    </div>
+
+    <div class="buttonDiv">
+        <button mat-raised-button class="button" color="primary" [disabled]="!addNewClass" [routerLink]="'/course-creation'">Ajouter un nouveau cours</button>
+    </div>
+    
+
+</div>
+

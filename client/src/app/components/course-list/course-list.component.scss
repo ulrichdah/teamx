@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: auto;
+}
+
+.student-card {
+    display: flex;
+    flex-direction: row;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    max-width: 400px;
+    width: auto;
+}
+
+.mat-tab-body-content { overflow: hidden!important}

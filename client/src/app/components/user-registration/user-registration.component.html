@@ -1,0 +1,91 @@
+<div class="main-wrapper" fxLayout="row" fxLayoutAlign="center center">
+    <mat-card class="box">
+      <mat-card-header>
+        <mat-card-title>S'inscrire</mat-card-title>
+      </mat-card-header>
+  
+      <form class="form" [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+  
+        <mat-card-content>            
+  
+          <mat-form-field class="full-width">
+            <mat-label>Choisir le type de compte</mat-label>
+            <mat-select>
+              <mat-option [value]="account" *ngFor="let account of accounts">{{account}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <input matInput formControlName="firstName" placeholder="Prénom">
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <input matInput formControlName="lastName" placeholder="Nom">
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <input matInput formControlName="username" placeholder="Nom d'utilisateur">
+          </mat-form-field>
+  
+          <mat-form-field class="full-width">
+            <input matInput formControlName="password" placeholder="Mot de passe" [type]="hide ? 'password' : 'text'">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <input matInput formControlName="confirmPassword" placeholder="Confirmer mot de passe" type="password">
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <input matInput formControlName="email" placeholder="Courriel">
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <input matInput formControlName="facebook" placeholder="Nom Facebook">
+          </mat-form-field>
+
+          
+          <div formArrayName="courses" class="courses">
+              <div *ngFor="let item of courses.controls; let courseIndex=index" [formGroupName]="courseIndex">
+                <mat-divider></mat-divider>
+                <mat-form-field class="full-width">
+                  <!-- <mat-label>Sigle du cours</mat-label> -->
+                  <input matInput formControlName="courseName" [matAutocomplete]="auto" placeholder="Identifiant cours">
+                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                  <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                      {{option}}
+                  </mat-option>
+                  </mat-autocomplete>
+                    <!-- <input matInput formControlName="courseName" placeholder="Identifiant cours"> -->
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <input matInput formControlName="experiences" placeholder="Experiences en rapport au cours">
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <input matInput formControlName="goals" placeholder="Objectifs d'apprentissage">
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <input matInput formControlName="grade" placeholder="Note espérée">
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <input matInput formControlName="availabilities" placeholder="Disponibilités pour travailler sur ce cours">
+                </mat-form-field>
+                <button mat-fab (click)="deleteCourse(courseIndex)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+            <div class="addCourseButton">
+                <button mat-fab color="accent"(click)="addCourse()">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+          </div>
+          
+        </mat-card-content>
+  
+        <button mat-stroked-button color="primary" class="btn-block" type="submit">S'inscrire</button>
+  
+      </form>
+    </mat-card>
+  </div>
