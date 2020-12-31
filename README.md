@@ -4,7 +4,7 @@ Personal project to help students with team creation remotely
 
 ## Installation
 
--   Instal `npm`. `npm` comes with `Node` that you cand download [here](https://nodejs.org/en/download/)
+-   Instal `npm`. `npm` comes with `Node` that you can download [here](https://nodejs.org/en/download/)
 
 -   Run `npm install`.
 
