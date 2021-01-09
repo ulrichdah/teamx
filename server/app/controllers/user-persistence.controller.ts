@@ -10,7 +10,7 @@ const HTTP_STATUS_CREATED = 201;
 export class UserPersistenceController {
     router: Router;
 
-    constructor(@inject(Types.IndexService) private userPersistenceService: UserPersistenceService) {
+    constructor(@inject(Types.UserPersistenceService) private userPersistenceService: UserPersistenceService) {
         this.configureRouter();
     }
 
@@ -21,6 +21,11 @@ export class UserPersistenceController {
             // Send the request to the service and send the response
             // const time: Message = await this.userPersistenceService.helloWorld();
             // res.json(time);
+        });
+
+        this.router.post('/login', async (req:Request, res: Response, next:NextFunction) => {
+            const loginResult = await this.userPersistenceService.login(req.body);
+            res.send(loginResult);
         });
 
         this.router.get('/infoStudent/:id', (req:Request, res: Response, next:NextFunction) => {
