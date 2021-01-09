@@ -15,6 +15,9 @@ npm-debug.log
 *.js.map
 *.js
 
+##Fichiers sensibles
+.env
+
 
 # Garder les fichiers necessaires pour les tests
 !systemjs.config.js
