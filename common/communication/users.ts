@@ -1,6 +1,7 @@
 import { Course } from "./course";
 
 export interface Student {
+    _id?: string;
     firstName: string;
     lastName: string;
     username: string;
@@ -11,6 +12,7 @@ export interface Student {
 }
 
 export interface Team {
+    _id?: string;
     username: string;
     password: string;
     email: string;
