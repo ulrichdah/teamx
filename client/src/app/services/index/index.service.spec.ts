@@ -1,6 +1,6 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { Message } from '../../../../../common/communication/message';
+import { UserLoginInfo } from '../../../../../common/communication/user-login-info';
 import { IndexService } from './index.service';
 
 describe('IndexService', () => {
@@ -25,10 +25,10 @@ describe('IndexService', () => {
     });
 
     it('should return expected message (HttpClient called once)', () => {
-        const expectedMessage: Message = { body: 'Hello', title: 'World' };
+        const expectedMessage: UserLoginInfo = { body: 'Hello', title: 'World' };
 
         // check the content of the mocked call
-        service.basicGet().subscribe((response: Message) => {
+        service.basicGet().subscribe((response: UserLoginInfo) => {
             expect(response.title).toEqual(expectedMessage.title, 'Title check');
             expect(response.body).toEqual(expectedMessage.body, 'body check');
         }, fail);
@@ -40,7 +40,7 @@ describe('IndexService', () => {
     });
 
     it('should not return any message when sending a POST request (HttpClient called once)', () => {
-        const sentMessage: Message = { body: 'Hello', title: 'World' };
+        const sentMessage: UserLoginInfo = { body: 'Hello', title: 'World' };
 
         // subscribe to the mocked call
         service.basicPost(sentMessage).subscribe(() => {console.error('toto');}, fail);
@@ -52,7 +52,7 @@ describe('IndexService', () => {
     });
 
     it('should handle http error safely', () => {
-        service.basicGet().subscribe((response: Message) => {
+        service.basicGet().subscribe((response: UserLoginInfo) => {
             expect(response).toBeUndefined();
         }, fail);
 

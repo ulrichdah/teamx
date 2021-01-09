@@ -5,17 +5,35 @@
         <mat-card-title>Connexion</mat-card-title>
       </mat-card-header>
   
-      <form>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-card-content>
           <mat-form-field class="full-width">
-            <input matInput placeholder="Nom d'utilisateur">
+            <input matInput formControlName="username" placeholder="Nom d'utilisateur">
           </mat-form-field>
+          <div *ngIf="isFieldInvalid('username')">
+            <small class="error-text">
+                Un nom d'utilisateur est requis
+            </small>
+          </div>
   
           <mat-form-field class="full-width">
-            <input matInput placeholder="Mot de passe">
+            <input type="password" formControlName="password" matInput placeholder="Mot de passe">
           </mat-form-field>
+          <div *ngIf="isFieldInvalid('password')">
+            <small class="error-text">
+                Un mot de passe est requis
+            </small>
+          </div>
+
         </mat-card-content>
-        <button mat-stroked-button color="primary" class="btn-block">Connexion</button>
+        <div *ngIf="isPending">
+          <mat-spinner class="spinner"></mat-spinner>
+        </div>
+        <button *ngIf="!isPending" mat-stroked-button color="primary" class="btn-block" [disabled]="loginForm.invalid">Connexion</button>
+        <div class="error-text" *ngIf="loginFailed">
+          Nom d'utilisateur ou mot de passe incorrect!
+        </div>
+
         <br/><br/>Pas de compte ? <a [routerLink]="['/registration']">Inscrivez-vous</a>.
       </form>
     </mat-card>

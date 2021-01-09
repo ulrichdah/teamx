@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Message } from '../../../../../common/communication/message';
+import { UserLoginInfo } from '../../../../../common/communication/user-login-info';
 
 @Injectable({
     providedIn: 'root',
@@ -12,11 +12,11 @@ export class IndexService {
 
     constructor(private http: HttpClient) { }
 
-    basicGet(): Observable<Message> {
-        return this.http.get<Message>(this.BASE_URL).pipe(catchError(this.handleError<Message>('basicGet')));
+    basicGet(): Observable<UserLoginInfo> {
+        return this.http.get<UserLoginInfo>(this.BASE_URL).pipe(catchError(this.handleError<UserLoginInfo>('basicGet')));
     }
 
-    basicPost(message: Message): Observable<void> {
+    basicPost(message: UserLoginInfo): Observable<void> {
         return this.http.post<void>(this.BASE_URL + '/send', message);
     }
 

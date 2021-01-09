@@ -9,6 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatSelectModule} from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -21,6 +22,7 @@ import { LoginComponent } from './components/login/login.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import { NewCourseCreationComponent } from './components/new-course-creation/new-course-creation.component';
 import { UserRegistrationComponent } from './components/user-registration/user-registration.component';
+import { AuthGuardService } from './services/auth-guard.service';
 
 @NgModule({
     declarations: [
@@ -49,8 +51,9 @@ import { UserRegistrationComponent } from './components/user-registration/user-r
         BrowserAnimationsModule,
         MatSelectModule,
         MatDividerModule,
+        MatProgressSpinnerModule,
     ],
-    providers: [],
+    providers: [AuthGuardService],
     bootstrap: [AppComponent],
 })
 export class AppModule { }
