@@ -16,9 +16,12 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isPending: boolean;
   loginFailed: boolean;
+  hidePassword:boolean;
 
   constructor(private fb: FormBuilder, private loginService: LoginService, private cookieService: CookieService,
-    private router: Router) {}
+    private router: Router) {
+      this.hidePassword = true;
+    }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({

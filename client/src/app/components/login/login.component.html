@@ -17,7 +17,8 @@
           </div>
   
           <mat-form-field class="full-width">
-            <input type="password" formControlName="password" matInput placeholder="Mot de passe">
+            <input matInput formControlName="password" placeholder="Mot de passe" [type]="hidePassword ? 'password' : 'text'">
+            <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
           </mat-form-field>
           <div *ngIf="isFieldInvalid('password')">
             <small class="error-text">
