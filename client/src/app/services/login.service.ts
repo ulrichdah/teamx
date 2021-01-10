@@ -16,7 +16,7 @@ export class LoginService {
   }
 
   login(userInfo: UserLoginInfo): Observable<LoginResult> {
-      return this.http.post<LoginResult>(this.BASE_URL + '/login', userInfo).pipe(catchError(this.handleError<LoginResult>('basicGet')));
+      return this.http.post<LoginResult>(this.BASE_URL + '/login', userInfo).pipe(catchError(this.handleError<LoginResult>('Login request')));
   }
 
   private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {

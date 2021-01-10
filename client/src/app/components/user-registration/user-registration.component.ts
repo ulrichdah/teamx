@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AccountType, MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH, MIN_PASSWORD_LENGTH, MIN_USERNAME_LENGTH } from 'src/app/classes/constants';
-import { Student } from 'src/app/classes/course';
+import { UserRegistrationService } from '../../services/user-registration.service';
 
 @Component({
   selector: 'app-user-registration',
@@ -21,8 +22,10 @@ export class UserRegistrationComponent implements OnInit {
     'Igor'
   ];
   filteredOptions: Observable<string[]>;
+  isExistingUsername: Observable<boolean>;
+  retryRegistration: boolean = false;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private userRegistrationService: UserRegistrationService, private router: Router) {}
 
   ngOnInit(): void {
     this.registrationForm = this.fb.group({
@@ -50,6 +53,10 @@ export class UserRegistrationComponent implements OnInit {
     return this.registrationForm.get('courses') as FormArray;
   }
 
+  onUsernameChange(): void {
+    this.isExistingUsername = this.userRegistrationService.isExistingUsername(this.registrationForm.get('username')?.value);
+  }
+
   onSelectionChange(value: string): void {
     if (value === this.accounts[0]) {
       this.registrationForm.removeControl('teamName');
@@ -63,8 +70,15 @@ export class UserRegistrationComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const toto: Student = this.registrationForm.value as Student;
-    console.log(toto);
+    this.retryRegistration = false;
+    this.userRegistrationService.addUser(this.registrationForm.value).subscribe((success: boolean) => {
+      if (success) {
+        this.router.navigate(['/login']);
+      } else {
+        this.onUsernameChange();
+        this.retryRegistration = true;
+      }
+    });
   }
 
   addCourse(): void {
@@ -75,14 +89,11 @@ export class UserRegistrationComponent implements OnInit {
       grade:[''],
       availabilities:[''],
     }));
+    this.observeCourseField();
   }
 
   deleteCourse(index: number): void {
     this.courses.removeAt(index);
-  }
-
-  displayFn(course: string): string {
-    return course && course ? course : '';
   }
 
   isFieldInvalid(fieldName: string, subFieldName?: string, index?: number): boolean | null {
@@ -101,6 +112,14 @@ export class UserRegistrationComponent implements OnInit {
     return passwordField && confirmPasswordField &&
     (passwordField.touched || passwordField.dirty) && (confirmPasswordField.touched || confirmPasswordField.dirty) &&
     passwordField.value === confirmPasswordField.value;
+  }
+
+  isFormInvalid(): boolean {
+    return this.registrationForm.invalid || !this.isPasswordConfirmed();
+  }
+
+  displayFn(course: string): string {
+    return course && course ? course : '';
   }
 
   private _filter(name: string): string[] {

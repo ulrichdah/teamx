@@ -8,8 +8,10 @@ import { Course } from 'src/app/classes/course';
   styleUrls: ['./course-list.component.scss']
 })
 export class CourseListComponent implements OnInit {
-  currentCourse: Course;
-  courses: Course[] = [
+  // tslint:disable-next-line:no-any
+  currentCourse: any;
+  // tslint:disable-next-line:no-any
+  courses: any = [
     {
       id: 'Mary', name: 'Mary', students: [
         {title: 'string', name: 'string', description: 'string', imageSrc: 'https://material.angular.io/assets/img/examples/shiba2.jpg'},

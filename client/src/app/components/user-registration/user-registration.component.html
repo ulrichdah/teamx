@@ -53,7 +53,7 @@
           </div>
 
           <mat-form-field class="full-width">
-            <input matInput formControlName="username" placeholder="Nom d'utilisateur" required>
+            <input matInput formControlName="username" placeholder="Nom d'utilisateur" required (ngModelChange)="onUsernameChange()" >
           </mat-form-field>
           <div *ngIf="isFieldInvalid('username')">
             <small *ngIf="registrationForm.get('username')!.errors!.required" class="error-text">
@@ -61,7 +61,12 @@
             </small>
             <small *ngIf="isLengthInvalid('username')" class="error-text">
               Un nom d'utilisateur doit avoir entre 3 et 15 caractères 
-          </small>
+            </small>
+          </div>
+          <div *ngIf="(isExistingUsername | async)" class="error-text">
+            <small>
+              Ce nom d'utilisateur n'est pas disponible 
+            </small>
           </div>
   
           <mat-form-field class="full-width">
@@ -171,7 +176,10 @@
           </div>
         </mat-card-content>
 
-        <button mat-raised-button color="primary" class="btn-block" (click)="onSubmit()" [disabled]="registrationForm.invalid">S'inscrire</button>
+        <button mat-raised-button color="primary" class="btn-block" (click)="onSubmit()" [disabled]="isFormInvalid() || (isExistingUsername | async)">S'inscrire</button>
+        <div *ngIf="retryRegistration" class="error-text">
+          Une erreur est survenue lors de l'inscription, vérifier et réessayer!
+        </div>
       </form>
     </mat-card>
     
