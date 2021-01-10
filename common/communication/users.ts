@@ -1,18 +1,11 @@
 import { Course } from "./course";
 
-export interface Student {
+export interface User {
     _id?: string;
-    firstName: string;
-    lastName: string;
-    username: string;
-    password: string;
-    email: string;
-    facebook: string;
-    courses: UserCourse[]
-}
-
-export interface Team {
-    _id?: string;
+    firstName?: string;
+    lastName?: string;
+    teamName?: string;
+    accountType: string;
     username: string;
     password: string;
     email: string;
