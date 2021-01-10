@@ -1,7 +1,7 @@
 import { inject } from 'inversify';
 import * as mongodb from 'mongodb';
 import { Course } from '../../../common/communication/course';
-import { Student, Team } from '../../../common/communication/users';
+import { User } from '../../../common/communication/users';
 import { DatabaseService } from '../services/database.service';
 import Types from '../types';
 
@@ -13,8 +13,9 @@ export class DbCollection {
         this.init(collectionName);
     }
 
-    async insertOne(data: Course | Team | Student): Promise<void> {
-        await this.collection.insertOne(data);
+    async insertOne(data: Course | User): Promise<boolean> {
+        const result = await this.collection.insertOne(data);
+        return result.insertedCount === 1;
     }
 
     async insertMany(data: Course[]): Promise<void> {
@@ -22,13 +23,13 @@ export class DbCollection {
     }
 
     // tslint:disable-next-line:no-any
-    async findOne(query: mongodb.FilterQuery<any>): Promise<Student | Team | null> {
+    async findOne(query: mongodb.FilterQuery<any>): Promise<User | null> {
         return await this.collection.findOne(query);
     }
 
-    // TODO
-    async find(query: mongodb.FilterQuery<string>): Promise<Student[]> {
-        return (await this.collection.find(query).toArray()) as Student[];
+    // tslint:disable-next-line:no-any
+    async find(query: mongodb.FilterQuery<any>): Promise<User[]> {
+        return (await this.collection.find(query).toArray()) as User[];
     }
 
     private async init(collectionName: string): Promise<void> {

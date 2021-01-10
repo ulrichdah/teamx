@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { inject, injectable } from 'inversify';
+import { User } from '../../../common/communication/users';
 
 import { UserPersistenceService } from '../services/user-persistence.service';
 import Types from '../types';
@@ -28,28 +29,14 @@ export class UserPersistenceController {
             res.send(loginResult);
         });
 
-        this.router.get('/infoStudent/:id', (req:Request, res: Response, next:NextFunction) => {
-            // const message: Message = req.body;
-            this.userPersistenceService.getStudentInfo(req.query.id);
-            res.sendStatus(HTTP_STATUS_CREATED);
+        this.router.post('/username-existence', async (req:Request, res: Response, next:NextFunction) => {
+            const isExistingUsername = await this.userPersistenceService.doesUsernameExist(req.body.username);
+            res.send(isExistingUsername);
         });
 
-        this.router.get('/infoTeam/:id', (req:Request, res: Response, next:NextFunction) => {
-            // const message: Message = req.body;
-            // this.userPersistenceService.storeMessage(message);
-            res.sendStatus(HTTP_STATUS_CREATED);
-        });
-
-        this.router.post('/addStudent', (req:Request, res: Response, next:NextFunction) => {
-            // const message: Message = req.body;
-            // this.userPersistenceService.storeMessage(message);
-            res.sendStatus(HTTP_STATUS_CREATED);
-        });
-
-        this.router.post('/addTeam', (req:Request, res: Response, next:NextFunction) => {
-            // const message: Message = req.body;
-            // this.userPersistenceService.storeMessage(message);
-            res.sendStatus(HTTP_STATUS_CREATED);
+        this.router.post('/addUser', async (req:Request, res: Response, next:NextFunction) => {
+            const success = await this.userPersistenceService.addUser(req.body as User);
+            res.send(success);
         });
 
         this.router.patch('/updateInfoStudent/:id', (req:Request, res: Response, next:NextFunction) => {
