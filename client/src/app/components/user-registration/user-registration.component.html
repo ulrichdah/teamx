@@ -1,77 +1,165 @@
-<div class="main-wrapper" fxLayout="row" fxLayoutAlign="center center">
+<div class="general-info-wrapper" fxLayout="row" fxLayoutAlign="center center">
     <mat-card class="box">
       <mat-card-header>
-        <mat-card-title>S'inscrire</mat-card-title>
+        <mat-card-title>Inscription</mat-card-title>
       </mat-card-header>
   
-      <form class="form" [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+      <form class="form" [formGroup]="registrationForm">
   
         <mat-card-content>            
   
           <mat-form-field class="full-width">
             <mat-label>Choisir le type de compte</mat-label>
-            <mat-select>
+            <mat-select formControlName="accountType" (selectionChange)="onSelectionChange($event.value)" required>
               <mat-option [value]="account" *ngFor="let account of accounts">{{account}}
               </mat-option>
             </mat-select>
           </mat-form-field>
+          <div *ngIf="isFieldInvalid('accountType')">
+            <small class="error-text">
+                Le type de compte doit être sélectionné
+            </small>
+          </div>
+
+          <div *ngIf="!(registrationForm.get('accountType')!.value===accounts[0])">
+            <mat-form-field class="full-width">
+              <input matInput formControlName="teamName" placeholder="Nom d'équipe" required>
+            </mat-form-field>
+            <div *ngIf="isFieldInvalid('teamName')">
+              <small class="error-text">
+                  Indiquer un nom d'équipe
+              </small>
+            </div>
+          </div>
+
+          <div  *ngIf="registrationForm.get('accountType')!.value===accounts[0]">
+            <mat-form-field class="full-width">
+              <input matInput formControlName="firstName" placeholder="Prénom" required>
+            </mat-form-field>
+            <div *ngIf="isFieldInvalid('firstName')">
+              <small class="error-text">
+                  Indiquer votre prénom
+              </small>
+            </div>
+
+            <mat-form-field class="full-width">
+              <input matInput formControlName="lastName" placeholder="Nom" required>
+            </mat-form-field>
+            <div *ngIf="isFieldInvalid('lastName')">
+              <small class="error-text">
+                  Indiquer votre nom
+              </small>
+            </div>
+          </div>
 
           <mat-form-field class="full-width">
-            <input matInput formControlName="firstName" placeholder="Prénom">
+            <input matInput formControlName="username" placeholder="Nom d'utilisateur" required>
           </mat-form-field>
-
-          <mat-form-field class="full-width">
-            <input matInput formControlName="lastName" placeholder="Nom">
-          </mat-form-field>
-
-          <mat-form-field class="full-width">
-            <input matInput formControlName="username" placeholder="Nom d'utilisateur">
-          </mat-form-field>
+          <div *ngIf="isFieldInvalid('username')">
+            <small *ngIf="registrationForm.get('username')!.errors!.required" class="error-text">
+                Indiquer un nom d'utilisateur
+            </small>
+            <small *ngIf="isLengthInvalid('username')" class="error-text">
+              Un nom d'utilisateur doit avoir entre 3 et 15 caractères 
+          </small>
+          </div>
   
           <mat-form-field class="full-width">
-            <input matInput formControlName="password" placeholder="Mot de passe" [type]="hide ? 'password' : 'text'">
+            <input matInput formControlName="password" placeholder="Mot de passe" [type]="hide ? 'password' : 'text'" required>
             <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
           </mat-form-field>
+          <div *ngIf="isFieldInvalid('password')">
+            <small *ngIf="registrationForm.get('password')!.errors!.required" class="error-text">
+                Indiquer un mot de passe
+            </small>
+            <small *ngIf="isLengthInvalid('password')" class="error-text">
+                Un mot de passe doit avoir entre 6 et 30 caractères
+            </small>
+          </div>
 
           <mat-form-field class="full-width">
-            <input matInput formControlName="confirmPassword" placeholder="Confirmer mot de passe" type="password">
+            <input matInput formControlName="confirmPassword" placeholder="Confirmer mot de passe" type="password" required>
           </mat-form-field>
+          <div *ngIf="isFieldInvalid('confirmPassword')">
+            <small *ngIf="registrationForm.get('confirmPassword')!.errors!.required" class="error-text">
+                Indiquer un mot de passe
+            </small>
+            <small *ngIf="isLengthInvalid('confirmPassword')" class="error-text">
+                Un mot de passe doit avoir entre 6 et 30 caractères
+            </small>
+          </div>
+          <div *ngIf="(registrationForm.get('confirmPassword')!.touched || registrationForm.get('confirmPassword')!.dirty) && !isPasswordConfirmed()">
+            <small class="error-text">
+                Le mot de passe n'est pas celui entré précédemment
+            </small>
+          </div>
 
           <mat-form-field class="full-width">
-            <input matInput formControlName="email" placeholder="Courriel">
+            <input matInput formControlName="email" placeholder="Courriel" required>
           </mat-form-field>
+          <div *ngIf="isFieldInvalid('email')">
+            <small class="error-text">
+                Indiquer un courriel
+            </small>
+          </div>
 
           <mat-form-field class="full-width">
             <input matInput formControlName="facebook" placeholder="Nom Facebook">
           </mat-form-field>
+        </mat-card-content>
+      </form>
+    </mat-card>
+</div>
 
+<div class="courses-wrapper" fxLayout="row" fxLayoutAlign="center center">
+
+    <mat-card class="box">
+      <mat-card-header>
+        <mat-card-title>Cours associés</mat-card-title>
+      </mat-card-header>
+  
+      <form class="form" [formGroup]="registrationForm">
+  
+        <mat-card-content>            
           
           <div formArrayName="courses" class="courses">
               <div *ngFor="let item of courses.controls; let courseIndex=index" [formGroupName]="courseIndex">
-                <mat-divider></mat-divider>
                 <mat-form-field class="full-width">
-                  <!-- <mat-label>Sigle du cours</mat-label> -->
-                  <input matInput formControlName="courseName" [matAutocomplete]="auto" placeholder="Identifiant cours">
+                  <input matInput formControlName="courseName" [matAutocomplete]="auto" placeholder="Identifiant cours" required>
                   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                   <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                       {{option}}
                   </mat-option>
                   </mat-autocomplete>
-                    <!-- <input matInput formControlName="courseName" placeholder="Identifiant cours"> -->
                 </mat-form-field>
+                <div *ngIf="isFieldInvalid('courses', 'courseName', courseIndex)">
+                  <small class="error-text">
+                      Indiquer l'identifiant du cours
+                  </small>
+                </div>
+
                 <mat-form-field class="full-width">
                     <input matInput formControlName="experiences" placeholder="Experiences en rapport au cours">
                 </mat-form-field>
+
                 <mat-form-field class="full-width">
-                    <input matInput formControlName="goals" placeholder="Objectifs d'apprentissage">
+                    <input matInput formControlName="goals" placeholder="Objectifs d'apprentissage" required>
                 </mat-form-field>
+                <div *ngIf="isFieldInvalid('courses', 'goals', courseIndex)">
+                  <small class="error-text">
+                      Indiquer vos objectifs d'apprentissage
+                  </small>
+                </div>
+
                 <mat-form-field class="full-width">
                     <input matInput formControlName="grade" placeholder="Note espérée">
                 </mat-form-field>
+
                 <mat-form-field class="full-width">
                     <input matInput formControlName="availabilities" placeholder="Disponibilités pour travailler sur ce cours">
                 </mat-form-field>
-                <button mat-fab (click)="deleteCourse(courseIndex)">
+
+                <button mat-mini-fab [disabled]="courseIndex==0" (click)="deleteCourse(courseIndex)">
                     <mat-icon>delete</mat-icon>
                 </button>
             </div>
@@ -81,11 +169,10 @@
                 </button>
             </div>
           </div>
-          
         </mat-card-content>
-  
-        <button mat-stroked-button color="primary" class="btn-block" type="submit">S'inscrire</button>
-  
+
+        <button mat-raised-button color="primary" class="btn-block" (click)="onSubmit()" [disabled]="registrationForm.invalid">S'inscrire</button>
       </form>
     </mat-card>
+    
   </div>

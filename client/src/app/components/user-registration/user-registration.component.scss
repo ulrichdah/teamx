@@ -1,15 +1,20 @@
-.main-wrapper {
+.general-info-wrapper {
     height: 100%;
     padding-top: 10%;
 }
 
-.courses {
-    padding-left: 5%;
+.courses-wrapper {
+    height: 100%;
+    padding-top: 1%;
 }
 
 .addCourseButton {
     padding-top: 20px;
-    padding-left: 100%;
+    padding-left: 95%;
+}
+
+.error-text {
+	color: red;
 }
 
 .positronx {
@@ -57,39 +62,39 @@
 	z-index: -1;
 }
 
-.main-wrapper .form {
+.general-info-wrapper .form {
 	min-width: 100%;
 	max-width: 300px;
 	width: 100%;
 }
 
-.main-wrapper .full-width,
-.main-wrapper .btn-block {
+.full-width,
+.btn-block {
 	width: 100%;
 }
 
-.main-wrapper mat-card-header {
+.general-info-wrapper mat-card-header {
 	text-align: center;
 	width: 100%;
 	display: block;
 	font-weight: 700;
 }
 
-.main-wrapper mat-card-header mat-card-title {
+.general-info-wrapper .courses-wrapper mat-card-header mat-card-title {
 	font-size: 30px;
 	margin: 0;
 }
 
-.main-wrapper .mat-card {
+.general-info-wrapper .courses-wrapper .mat-card {
 	padding: 45px 70px 55px;
 }
 
-.main-wrapper .mat-stroked-button {
+.general-info-wrapper .courses-wrapper .mat-stroked-button {
 	border: 1px solid currentColor;
 	line-height: 54px;
 	background: #FFF7FA;
 }
 
-.main-wrapper .mat-form-field-appearance-legacy .mat-form-field-infix {
+.general-info-wrapper .courses-wrapper .mat-form-field-appearance-legacy .mat-form-field-infix {
 	padding: 0.8375em 0;
 }
