@@ -25,17 +25,23 @@ export class UserPersistenceController {
         });
 
         this.router.post('/login', async (req:Request, res: Response, next:NextFunction) => {
-            const loginResult = await this.userPersistenceService.login(req.body);
+            const loginResult = await this.userPersistenceService.login(req.body).catch((reason) => {
+                console.error('An error occured during the login. Details: ' + reason);
+            });
             res.send(loginResult);
         });
 
         this.router.post('/username-existence', async (req:Request, res: Response, next:NextFunction) => {
-            const isExistingUsername = await this.userPersistenceService.doesUsernameExist(req.body.username);
+            const isExistingUsername = await this.userPersistenceService.doesUsernameExist(req.body.username).catch((reason) => {
+                console.error('An error occured during the username existence check. Details: ' + reason);
+            });
             res.send(isExistingUsername);
         });
 
         this.router.post('/addUser', async (req:Request, res: Response, next:NextFunction) => {
-            const success = await this.userPersistenceService.addUser(req.body as User);
+            const success = await this.userPersistenceService.addUser(req.body as User).catch((reason) => {
+                console.error('An error occured when trying to add a new user. Details: ' + reason);
+            });
             res.send(success);
         });
 
