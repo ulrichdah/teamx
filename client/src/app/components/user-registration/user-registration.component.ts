@@ -23,6 +23,7 @@ export class UserRegistrationComponent implements OnInit {
   ];
   filteredOptions: Observable<string[]>;
   isExistingUsername: Observable<boolean>;
+  isPending: boolean = false;
   retryRegistration: boolean = false;
   photoName: string = '(Vide)';
 
@@ -85,7 +86,9 @@ export class UserRegistrationComponent implements OnInit {
 
   onSubmit(): void {
     this.retryRegistration = false;
+    this.isPending = true;
     this.userRegistrationService.addUser(this.registrationForm.value).subscribe((success: boolean) => {
+      this.isPending = false;
       if (success) {
         this.router.navigate(['/login']);
       } else {

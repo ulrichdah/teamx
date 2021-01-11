@@ -179,7 +179,10 @@
           </div>
         </mat-card-content>
 
-        <button mat-raised-button color="primary" class="btn-block" (click)="onSubmit()" [disabled]="isFormInvalid() || (isExistingUsername | async)">S'inscrire</button>
+        <div *ngIf="isPending">
+          <mat-spinner class="spinner"></mat-spinner>
+        </div>
+        <button *ngIf="!isPending" mat-raised-button color="primary" class="btn-block" (click)="onSubmit()" [disabled]="isFormInvalid() || (isExistingUsername | async)">S'inscrire</button>
         <div *ngIf="retryRegistration" class="error-text">
           Une erreur est survenue lors de l'inscription, vérifier et réessayer!
         </div>
