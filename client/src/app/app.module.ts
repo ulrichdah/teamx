@@ -9,6 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {MatSelectModule} from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -21,6 +22,7 @@ import { CourseListComponent } from './components/course-list/course-list.compon
 import { LoginComponent } from './components/login/login.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import { NewCourseCreationComponent } from './components/new-course-creation/new-course-creation.component';
+import { ToolBarComponent } from './components/tool-bar/tool-bar.component';
 import { UserRegistrationComponent } from './components/user-registration/user-registration.component';
 import { AuthGuardService } from './services/auth-guard.service';
 
@@ -31,7 +33,8 @@ import { AuthGuardService } from './services/auth-guard.service';
         NewCourseCreationComponent,
         CourseListComponent,
         LoginComponent,
-        UserRegistrationComponent
+        UserRegistrationComponent,
+        ToolBarComponent
     ],
     imports: [
         BrowserModule,
@@ -52,6 +55,7 @@ import { AuthGuardService } from './services/auth-guard.service';
         MatSelectModule,
         MatDividerModule,
         MatProgressSpinnerModule,
+        MatMenuModule,
     ],
     providers: [AuthGuardService],
     bootstrap: [AppComponent],

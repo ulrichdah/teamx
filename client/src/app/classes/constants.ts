@@ -3,6 +3,12 @@ export enum AccountType {
     INCOMPLETE_TEAM = 'Groupe incomplet'
 }
 
+export enum MenuItemID {
+    LOGOUT = 0,
+    ABOUT = 1,
+    PROFILE = 2
+}
+
 export const MIN_USERNAME_LENGTH = 3;
 export const MAX_USERNAME_LENGTH = 15;
 
