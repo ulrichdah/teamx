@@ -14,6 +14,7 @@ export class UserPersistenceService {
 
     constructor(@inject(Types.DatabaseService) db: DatabaseService) {
         this.dbCollection = new DbCollection('users', db);
+        this.existingUsernames = [];
     }
 
     getStudentInfo(id: string): User {
@@ -33,7 +34,9 @@ export class UserPersistenceService {
 
     async login(userInfo: UserLoginInfo): Promise<LoginResult> {
         const user = await this.dbCollection.findOne({username: userInfo.username});
-        if (user?.password === userInfo.password) return { isLoggedIn: true, sessionId: user._id} as LoginResult;
+        if (user?.password === userInfo.password) {
+            return { isLoggedIn: true, sessionId: user._id, username: user.username, userPhoto: user.userPhoto} as LoginResult;
+        }
         return  { isLoggedIn: false} as LoginResult;
     }
 

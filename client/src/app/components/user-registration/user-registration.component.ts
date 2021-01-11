@@ -24,6 +24,7 @@ export class UserRegistrationComponent implements OnInit {
   filteredOptions: Observable<string[]>;
   isExistingUsername: Observable<boolean>;
   retryRegistration: boolean = false;
+  photoName: string = '(Vide)';
 
   constructor(private fb: FormBuilder, private userRegistrationService: UserRegistrationService, private router: Router) {}
 
@@ -33,6 +34,7 @@ export class UserRegistrationComponent implements OnInit {
       teamName: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
+      userPhoto: [''],
       username: ['', [Validators.required, Validators.minLength(MIN_USERNAME_LENGTH), Validators.maxLength(MAX_USERNAME_LENGTH)]],
       password: ['', [Validators.required, Validators.minLength(MIN_PASSWORD_LENGTH), Validators.maxLength(MAX_PASSWORD_LENGTH)]],
       confirmPassword: ['', [Validators.required,  Validators.minLength(MIN_PASSWORD_LENGTH), Validators.maxLength(MAX_PASSWORD_LENGTH)]],
@@ -51,6 +53,18 @@ export class UserRegistrationComponent implements OnInit {
 
   get courses(): FormArray {
     return this.registrationForm.get('courses') as FormArray;
+  }
+
+  handleFileInput(files: FileList): void {
+    this.photoName = files[0].name;
+    const reader = new FileReader();
+    reader.readAsDataURL(files[0]);
+    reader.onload = () => {
+      this.registrationForm.get('userPhoto')?.setValue(reader.result?.toString());
+    };
+    reader.onerror = (error) => {
+      console.error('Error: ', error);
+    };
   }
 
   onUsernameChange(): void {

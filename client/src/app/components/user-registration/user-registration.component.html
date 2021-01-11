@@ -111,6 +111,9 @@
           <mat-form-field class="full-width">
             <input matInput formControlName="facebook" placeholder="Nom Facebook">
           </mat-form-field>
+
+          <button type="button" mat-raised-button (click)="fileInput.click()">Choisir une photo d'utilisateur</button> {{photoName}}
+          <input hidden #fileInput type="file" accept=".png, .jpg, .jpeg" (change)="handleFileInput($event.target.files)">
         </mat-card-content>
       </form>
     </mat-card>

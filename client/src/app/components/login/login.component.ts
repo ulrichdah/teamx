@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
 import { LoginResult, UserLoginInfo } from '../../../../../common/communication/user-login-info';
 import { LoginService } from '../../services/login.service';
 
-const COOKIE_DURATION = 30;
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -18,8 +16,7 @@ export class LoginComponent implements OnInit {
   loginFailed: boolean;
   hidePassword:boolean;
 
-  constructor(private fb: FormBuilder, private loginService: LoginService, private cookieService: CookieService,
-    private router: Router) {
+  constructor(private fb: FormBuilder, private loginService: LoginService, private router: Router) {
       this.hidePassword = true;
     }
 
@@ -28,7 +25,6 @@ export class LoginComponent implements OnInit {
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
-    this.cookieService.deleteAll();
   }
 
   onSubmit(): void {
@@ -40,11 +36,7 @@ export class LoginComponent implements OnInit {
       this.loginFailed = !result.isLoggedIn;
 
       if (result.isLoggedIn) {
-        this.loginService.isLoggedIn = true;
-        const expirationDate = new Date();
-        expirationDate.setMinutes(expirationDate.getMinutes() + COOKIE_DURATION);
-        this.cookieService.set('sessionId', result.sessionId, expirationDate);
-        this.cookieService.set('username', this.loginForm.value.username, expirationDate);
+        this.loginService.setLoginState(result);
 
         this.router.navigate(['home']);
       }
