@@ -6,6 +6,7 @@ import { UserPersistenceService } from '../services/user-persistence.service';
 import Types from '../types';
 
 const HTTP_STATUS_CREATED = 201;
+const HTTP_STATUS_INTERNAL_ERROR = 500;
 
 @injectable()
 export class UserPersistenceController {
@@ -45,25 +46,25 @@ export class UserPersistenceController {
             res.send(success);
         });
 
+        this.router.get('/getUser/:username', async (req:Request, res: Response, next:NextFunction) => {
+            const username = req.params.username;
+            const user = await this.userPersistenceService.getUser(username).catch((reason) => {
+                console.error('An error occured when trying to get user information for the username: ' + username + '. Details: ' + reason);
+            });
+            if (user) res.send(user);
+            else {
+                console.error('No user found with the username: ' + username);
+                res.sendStatus(HTTP_STATUS_INTERNAL_ERROR);
+            }
+        });
+
         this.router.patch('/updateInfoStudent/:id', (req:Request, res: Response, next:NextFunction) => {
             // const message: Message = req.body;
             // this.userPersistenceService.storeMessage(message);
             res.sendStatus(HTTP_STATUS_CREATED);
         });
 
-        this.router.patch('/updateInfoTeam/:id', (req:Request, res: Response, next:NextFunction) => {
-            // const message: Message = req.body;
-            // this.userPersistenceService.storeMessage(message);
-            res.sendStatus(HTTP_STATUS_CREATED);
-        });
-
         this.router.delete('/deleteStudent/:id', (req:Request, res: Response, next:NextFunction) => {
-            // const message: Message = req.body;
-            // this.userPersistenceService.storeMessage(message);
-            res.sendStatus(HTTP_STATUS_CREATED);
-        });
-
-        this.router.delete('/deleteTeam/:id', (req:Request, res: Response, next:NextFunction) => {
             // const message: Message = req.body;
             // this.userPersistenceService.storeMessage(message);
             res.sendStatus(HTTP_STATUS_CREATED);

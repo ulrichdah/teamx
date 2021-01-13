@@ -17,11 +17,6 @@ export class UserPersistenceService {
         this.existingUsernames = [];
     }
 
-    getStudentInfo(id: string): User {
-        this.dbCollection.insertOne({} as User);
-        return {} as User;
-    }
-
     async doesUsernameExist(username: string): Promise<boolean> {
         if (!this.existingUsernames) this.existingUsernames = await this.getAllUsernames();
         return this.existingUsernames.includes(username);
@@ -38,6 +33,11 @@ export class UserPersistenceService {
             return { isLoggedIn: true, sessionId: user._id, username: user.username, userPhoto: user.userPhoto} as LoginResult;
         }
         return  { isLoggedIn: false} as LoginResult;
+    }
+
+    async getUser(username: string): Promise<User | null> {
+        const user = await this.dbCollection.findOne({username});
+        return user;
     }
 
     private async getAllUsernames(): Promise<string[]> {
