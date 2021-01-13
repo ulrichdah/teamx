@@ -15,7 +15,7 @@ export interface User {
 }
 
 export interface UserCourse extends Course {
-    experience: string;
+    experiences: string;
     goals: string;
     grade: string;
     availabilities: string;
