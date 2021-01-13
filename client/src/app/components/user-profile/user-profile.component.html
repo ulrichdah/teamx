@@ -1,42 +1,53 @@
+<label class="hoverable" for="fileInput">
+    <img *ngIf="!photo || photo === ''" src="../../../assets/default.png" class="circle-wrapper">
+    <img *ngIf="photo && photo !== ''" src="{{photo}}" class="circle-wrapper">
+    <div class="hover-text">Choisir une nouvelle photo</div>
+    <div class="background"></div>
+</label>
+<br/>
+<input id="fileInput" type='file'  (change)="onFileUpload($event.target.files)">
 <div class="general-info-wrapper" fxLayout="row" fxLayoutAlign="center center">
     <mat-card class="box">
-      <mat-card-header>
-        <mat-card-title>Inscription</mat-card-title>
+      <mat-card-header fxLayout="row" fxLayoutAlign="center center">
+        <mat-card-title>Profile</mat-card-title>
+        <button mat-stroked-button class="edit-button" [disabled]="isEditing" (click)="enableEditing()">
+            <mat-icon>edit</mat-icon>
+        </button>
       </mat-card-header>
   
-      <form class="form" [formGroup]="registrationFormHandler.form">
+      <form class="form" [formGroup]="userFormHandler.form">
   
         <mat-card-content>            
   
           <mat-form-field class="full-width">
             <mat-label>Choisir le type de compte</mat-label>
-            <mat-select formControlName="accountType" (selectionChange)="onSelectionChange($event.value)" required>
+            <mat-select formControlName="accountType" (selectionChange)="onSelectionChange($event.value)"  required>
               <mat-option [value]="account" *ngFor="let account of accounts">{{account}}
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <div *ngIf="registrationFormHandler.isFieldInvalid('accountType')">
+          <div *ngIf="isEditing && userFormHandler.isFieldInvalid('accountType')">
             <small class="error-text">
                 Le type de compte doit être sélectionné
             </small>
           </div>
 
-          <div *ngIf="!(registrationFormHandler.form.get('accountType')!.value===accounts[0])">
+          <div *ngIf="!(userFormHandler.form.get('accountType')!.value===accounts[0])">
             <mat-form-field class="full-width">
               <input matInput formControlName="teamName" placeholder="Nom d'équipe" required>
             </mat-form-field>
-            <div *ngIf="registrationFormHandler.isFieldInvalid('teamName')">
+            <div *ngIf="isEditing && userFormHandler.isFieldInvalid('teamName')">
               <small class="error-text">
                   Indiquer un nom d'équipe
               </small>
             </div>
           </div>
 
-          <div  *ngIf="registrationFormHandler.form.get('accountType')!.value===accounts[0]">
+          <div *ngIf="userFormHandler.form.get('accountType')!.value===accounts[0]">
             <mat-form-field class="full-width">
               <input matInput formControlName="firstName" placeholder="Prénom" required>
             </mat-form-field>
-            <div *ngIf="registrationFormHandler.isFieldInvalid('firstName')">
+            <div *ngIf="isEditing && userFormHandler.isFieldInvalid('firstName')">
               <small class="error-text">
                   Indiquer votre prénom
               </small>
@@ -45,7 +56,7 @@
             <mat-form-field class="full-width">
               <input matInput formControlName="lastName" placeholder="Nom" required>
             </mat-form-field>
-            <div *ngIf="registrationFormHandler.isFieldInvalid('lastName')">
+            <div *ngIf="isEditing && userFormHandler.isFieldInvalid('lastName')">
               <small class="error-text">
                   Indiquer votre nom
               </small>
@@ -53,47 +64,47 @@
           </div>
 
           <mat-form-field class="full-width">
-            <input matInput formControlName="username" placeholder="Nom d'utilisateur" required (ngModelChange)="onUsernameChange()" >
+            <input matInput formControlName="username" placeholder="Nom d'utilisateur" required >
           </mat-form-field>
-          <div *ngIf="registrationFormHandler.isFieldInvalid('username')">
-            <small *ngIf="registrationFormHandler.form.get('username')!.errors!.required" class="error-text">
+          <div *ngIf="isEditing && userFormHandler.isFieldInvalid('username')">
+            <small *ngIf="userFormHandler.form.get('username')!.errors!.required" class="error-text">
                 Indiquer un nom d'utilisateur
             </small>
-            <small *ngIf="registrationFormHandler.isLengthInvalid('username')" class="error-text">
+            <small *ngIf="userFormHandler.isLengthInvalid('username')" class="error-text">
               Un nom d'utilisateur doit avoir entre 3 et 15 caractères 
             </small>
           </div>
-          <div *ngIf="(registrationFormHandler.isExistingUsername | async)" class="error-text">
+          <div *ngIf="isEditing && (userFormHandler.isExistingUsername | async)" class="error-text">
             <small>
               Ce nom d'utilisateur n'est pas disponible 
             </small>
           </div>
   
           <mat-form-field class="full-width">
-            <input matInput formControlName="password" placeholder="Mot de passe" [type]="registrationFormHandler.hidePassword ? 'password' : 'text'" required>
-            <mat-icon matSuffix (click)="registrationFormHandler.hidePassword = !registrationFormHandler.hidePassword">{{registrationFormHandler.hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <input matInput formControlName="password" placeholder="Mot de passe" [type]="userFormHandler.hidePassword ? 'password' : 'text'" required>
+            <mat-icon matSuffix (click)="userFormHandler.hidePassword = !userFormHandler.hidePassword">{{userFormHandler.hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
           </mat-form-field>
-          <div *ngIf="registrationFormHandler.isFieldInvalid('password')">
-            <small *ngIf="registrationFormHandler.form.get('password')!.errors!.required" class="error-text">
+          <div *ngIf="isEditing && userFormHandler.isFieldInvalid('password')">
+            <small *ngIf="userFormHandler.form.get('password')!.errors!.required" class="error-text">
                 Indiquer un mot de passe
             </small>
-            <small *ngIf="registrationFormHandler.isLengthInvalid('password')" class="error-text">
+            <small *ngIf="userFormHandler.isLengthInvalid('password')" class="error-text">
                 Un mot de passe doit avoir entre 6 et 30 caractères
             </small>
           </div>
 
-          <mat-form-field class="full-width">
+          <mat-form-field *ngIf="isEditing" class="full-width">
             <input matInput formControlName="confirmPassword" placeholder="Confirmer mot de passe" type="password" required>
           </mat-form-field>
-          <div *ngIf="registrationFormHandler.isFieldInvalid('confirmPassword')">
-            <small *ngIf="registrationFormHandler.form.get('confirmPassword')!.errors!.required" class="error-text">
+          <div *ngIf="isEditing && userFormHandler.isFieldInvalid('confirmPassword')">
+            <small *ngIf="userFormHandler.form.get('confirmPassword')!.errors!.required" class="error-text">
                 Indiquer un mot de passe
             </small>
-            <small *ngIf="registrationFormHandler.isLengthInvalid('confirmPassword')" class="error-text">
+            <small *ngIf="userFormHandler.isLengthInvalid('confirmPassword')" class="error-text">
                 Un mot de passe doit avoir entre 6 et 30 caractères
             </small>
           </div>
-          <div *ngIf="(registrationFormHandler.form.get('confirmPassword')!.touched || registrationFormHandler.form.get('confirmPassword')!.dirty) && !registrationFormHandler.isPasswordConfirmed()">
+          <div *ngIf="(userFormHandler.form.get('confirmPassword')!.touched || userFormHandler.form.get('confirmPassword')!.dirty) && !userFormHandler.isPasswordConfirmed()">
             <small class="error-text">
                 Le mot de passe n'est pas celui entré précédemment
             </small>
@@ -102,7 +113,7 @@
           <mat-form-field class="full-width">
             <input matInput formControlName="email" placeholder="Courriel" required>
           </mat-form-field>
-          <div *ngIf="registrationFormHandler.isFieldInvalid('email')">
+          <div *ngIf="isEditing && userFormHandler.isFieldInvalid('email')">
             <small class="error-text">
                 Indiquer un courriel
             </small>
@@ -111,9 +122,6 @@
           <mat-form-field class="full-width">
             <input matInput formControlName="facebook" placeholder="Nom Facebook">
           </mat-form-field>
-
-          <button type="button" mat-raised-button (click)="fileInput.click()">Choisir une photo d'utilisateur</button> {{photoName}}
-          <input hidden #fileInput type="file" accept=".png, .jpg, .jpeg" (change)="handleFileInput($event.target.files)">
         </mat-card-content>
       </form>
     </mat-card>
@@ -126,21 +134,21 @@
         <mat-card-title>Cours associés</mat-card-title>
       </mat-card-header>
   
-      <form class="form" [formGroup]="registrationFormHandler.form">
+      <form class="form" [formGroup]="userFormHandler.form">
   
         <mat-card-content>            
           
           <div formArrayName="courses" class="courses">
-              <div *ngFor="let item of registrationFormHandler.courses.controls; let courseIndex=index" [formGroupName]="courseIndex">
+              <div *ngFor="let item of userFormHandler.courses.controls; let courseIndex=index" [formGroupName]="courseIndex">
                 <mat-form-field class="full-width">
                   <input matInput formControlName="acronym" [matAutocomplete]="auto" placeholder="Identifiant cours" required>
-                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="registrationFormHandler.displayFn">
-                  <mat-option *ngFor="let option of registrationFormHandler.filteredOptions | async" [value]="option">
+                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="userFormHandler.displayFn">
+                  <mat-option *ngFor="let option of userFormHandler.filteredOptions | async" [value]="option">
                       {{option}}
                   </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
-                <div *ngIf="registrationFormHandler.isFieldInvalid('courses', 'acronym', courseIndex)">
+                <div *ngIf="userFormHandler.isFieldInvalid('courses', 'acronym', courseIndex)">
                   <small class="error-text">
                       Indiquer l'identifiant du cours
                   </small>
@@ -153,7 +161,7 @@
                 <mat-form-field class="full-width">
                     <input matInput formControlName="goals" placeholder="Objectifs d'apprentissage" required>
                 </mat-form-field>
-                <div *ngIf="registrationFormHandler.isFieldInvalid('courses', 'goals', courseIndex)">
+                <div *ngIf="userFormHandler.isFieldInvalid('courses', 'goals', courseIndex)">
                   <small class="error-text">
                       Indiquer vos objectifs d'apprentissage
                   </small>
@@ -167,26 +175,28 @@
                     <input matInput formControlName="availabilities" placeholder="Disponibilités pour travailler sur ce cours">
                 </mat-form-field>
 
-                <button mat-mini-fab [disabled]="courseIndex==0" (click)="registrationFormHandler.deleteCourse(courseIndex)">
+                <button mat-mini-fab [disabled]="!isEditing || courseIndex==0" (click)="userFormHandler.deleteCourse(courseIndex)">
                     <mat-icon>delete</mat-icon>
                 </button>
             </div>
-            <div class="addCourseButton">
-                <button mat-fab color="accent"(click)="registrationFormHandler.addCourse()">
+            <div *ngIf="isEditing" class="addCourseButton">
+                <button mat-mini-fab color="accent"(click)="userFormHandler.addCourse()">
                     <mat-icon>add</mat-icon>
                 </button>
             </div>
           </div>
         </mat-card-content>
 
-        <div *ngIf="registrationFormHandler.isPending">
+        <div *ngIf="userFormHandler.isPending">
           <mat-spinner class="spinner"></mat-spinner>
         </div>
-        <button *ngIf="!registrationFormHandler.isPending" mat-raised-button color="primary" class="btn-block" (click)="onSubmit()" [disabled]="registrationFormHandler.isFormInvalid() || (registrationFormHandler.isExistingUsername | async)">S'inscrire</button>
-        <div *ngIf="registrationFormHandler.retryRequest" class="error-text">
-          Une erreur est survenue lors de l'inscription, vérifier et réessayer!
+        <div mat-dialog-actions align="end">
+            <button *ngIf="isEditing && !userFormHandler.isPending" mat-raised-button color="secondary" class="btn-block" (click)="onCancel()">Annuler</button>
+            <button *ngIf="isEditing && !userFormHandler.isPending" mat-raised-button color="primary" class="btn-block" (click)="onSubmit()" [disabled]="userFormHandler.isFormInvalid() || (userFormHandler.isExistingUsername | async)">Mettre à jour</button>
+            <div *ngIf="userFormHandler.retryRequest" class="error-text">
+              Une erreur est survenue lors de la mise à jour des informations, vérifier et réessayer!
+            </div>
         </div>
       </form>
     </mat-card>
-    
-  </div>
+</div>

@@ -25,6 +25,7 @@ import { NewCourseCreationComponent } from './components/new-course-creation/new
 import { ToolBarComponent } from './components/tool-bar/tool-bar.component';
 import { UserRegistrationComponent } from './components/user-registration/user-registration.component';
 import { AuthGuardService } from './services/auth-guard.service';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 @NgModule({
     declarations: [
@@ -34,7 +35,8 @@ import { AuthGuardService } from './services/auth-guard.service';
         CourseListComponent,
         LoginComponent,
         UserRegistrationComponent,
-        ToolBarComponent
+        ToolBarComponent,
+        UserProfileComponent
     ],
     imports: [
         BrowserModule,

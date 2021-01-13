@@ -68,6 +68,10 @@ export class ToolBarComponent {
       case MenuItemID.LOGOUT:
         this.loginService.setLogoutState();
         this.router.navigate(['login']);
+        break;
+      case MenuItemID.PROFILE:
+        this.router.navigate(['user-profile/', this.loginService.loginResult.username]);
+        break;
     }
   }
 

@@ -15,7 +15,7 @@ export class LoginService {
   private readonly BASE_URL: string = 'http://localhost:3000/api/user-persistence';
 
   constructor(private cookieService: CookieService, private http: HttpClient) {
-    this.loginResult = {isLoggedIn: false} as LoginResult;
+    this.loginResult = {isLoggedIn: true, username: 'admin'} as LoginResult;
   }
 
   login(userInfo: UserLoginInfo): Observable<LoginResult> {
