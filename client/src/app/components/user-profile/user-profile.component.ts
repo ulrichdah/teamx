@@ -35,14 +35,21 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  canDeactivate(): boolean {
+    return this.initUserInfo.userPhoto === this.photo && !this.userFormHandler.form.dirty;
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  // tslint:disable-next-line:no-any
+  unloadNotification($event: any): void {
+      if (!this.canDeactivate()) {
+          $event.returnValue = true;
+      }
+  }
+
   enableEditing(): void {
     this.userFormHandler.form.enable();
     this.isEditing = true;
-  }
-
-  disableEditing(): void {
-    this.userFormHandler.form.disable();
-    this.isEditing = false;
   }
 
   onFileUpload(files: FileList): void {
@@ -72,4 +79,8 @@ export class UserProfileComponent implements OnInit {
     this.disableEditing();
   }
 
+  private disableEditing(): void {
+    this.userFormHandler.form.disable();
+    this.isEditing = false;
+  }
 }
