@@ -73,10 +73,22 @@ export class UserProfileComponent extends ComponentCanDeactivate implements OnIn
   }
 
   onSubmit(): void {
-    console.log(this.userFormHandler.form.value);
+    delete this.userFormHandler.form.value.confirmPassword;
+    this.userFormHandler.isPending = true;
+    this.userProfileService.updateInfo(this.userFormHandler.form.value).subscribe((success: boolean) => {
+      this.userFormHandler.isPending = false;
+      this.userFormHandler.retryRequest = !success;
+      if (success){
+        this.initUserInfo = this.userFormHandler.form.value;
+        this.userFormHandler.form.reset();
+        this.userFormHandler.initUserForm(this.initUserInfo);
+        this.disableEditing();
+      }
+    });
   }
 
   onCancel(): void {
+    this.userFormHandler.form.reset();
     this.userFormHandler.initUserForm(this.initUserInfo);
     this.photo = this.initUserInfo.userPhoto ? this.initUserInfo.userPhoto : '';
     this.disableEditing();

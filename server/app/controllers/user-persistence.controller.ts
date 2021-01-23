@@ -58,10 +58,16 @@ export class UserPersistenceController {
             }
         });
 
-        this.router.patch('/updateInfoStudent/:id', (req:Request, res: Response, next:NextFunction) => {
-            // const message: Message = req.body;
-            // this.userPersistenceService.storeMessage(message);
-            res.sendStatus(HTTP_STATUS_CREATED);
+        this.router.patch('/updateUser', async (req:Request, res: Response, next:NextFunction) => {
+            const user: User = req.body;
+            const success = await this.userPersistenceService.updateUser(user).catch((reason) => {
+                console.error('An error occured when trying to update user information for the username: ' + user.username + '. Details: ' + reason);
+            });
+            if (success) res.send(success);
+            else {
+                console.error('No user found with the username: ' + user.username);
+                res.sendStatus(HTTP_STATUS_INTERNAL_ERROR);
+            }
         });
 
         this.router.delete('/deleteStudent/:id', (req:Request, res: Response, next:NextFunction) => {

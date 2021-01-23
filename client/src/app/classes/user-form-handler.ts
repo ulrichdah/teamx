@@ -123,7 +123,7 @@ export class UserFormHandler {
         this.filteredOptions = acronymField.valueChanges
             .pipe(
             startWith(''),
-            map((value) => typeof value === 'string' ? value : value.name),
+            map((value) => typeof value === 'string' ? value : ''),
             map((name) => name ? this._filter(name) : this.courseOptions.slice())
             );
         }

@@ -32,6 +32,11 @@ export class DbCollection {
         return (await this.collection.find(query).toArray()) as User[];
     }
 
+    async updateOne(username: string, newUser: User): Promise<boolean> {
+        const result = await this.collection.updateOne({username}, {$set: newUser});
+        return result.modifiedCount === 1;
+    }
+
     private async init(collectionName: string): Promise<void> {
         if (!DbCollection.dbHandle) await this.initDB();
         this.collection = DbCollection.dbHandle.collection(collectionName);

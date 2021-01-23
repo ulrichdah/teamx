@@ -17,6 +17,10 @@ export class UserProfileService {
     return this.http.get<User>(this.BASE_URL + '/getUser/' + username).pipe(catchError(this.handleError<User>('Get for user information')));
   }
 
+  updateInfo(newInfo: User): Observable<boolean> {
+    return this.http.patch<boolean>(this.BASE_URL + '/updateUser', newInfo).pipe(catchError(this.handleError<boolean>('Update user information')));
+  }
+
   private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
     return (error: Error): Observable<T> => {
         return of(result as T);

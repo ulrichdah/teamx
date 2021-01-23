@@ -27,6 +27,10 @@ export class UserPersistenceService {
         return await this.dbCollection.insertOne(newUser);
     }
 
+    async updateUser(newUser: User): Promise<boolean> {
+        return await this.dbCollection.updateOne(newUser.username, newUser);
+    }
+
     async login(userInfo: UserLoginInfo): Promise<LoginResult> {
         const user = await this.dbCollection.findOne({username: userInfo.username});
         if (user?.password === userInfo.password) {
