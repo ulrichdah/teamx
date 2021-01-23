@@ -15,7 +15,14 @@ export class LoginService {
   private readonly BASE_URL: string = 'http://localhost:3000/api/user-persistence';
 
   constructor(private cookieService: CookieService, private http: HttpClient) {
-    this.loginResult = {isLoggedIn: true, username: 'admin'} as LoginResult;
+    if (this.cookieService.get('sessionId')) {
+      this.loginResult = {isLoggedIn: true, username: this.cookieService.get('username'),
+      sessionId: this.cookieService.get('sessionId')};
+      const photo = localStorage.getItem('userPhoto');
+      if(photo) this.loginResult.userPhoto = photo;
+    } else {
+      this.loginResult = {isLoggedIn: false} as LoginResult;
+    }
   }
 
   login(userInfo: UserLoginInfo): Observable<LoginResult> {
@@ -28,12 +35,15 @@ export class LoginService {
     expirationDate.setMinutes(expirationDate.getMinutes() + COOKIE_DURATION);
     this.cookieService.set('sessionId', loginResult.sessionId, expirationDate);
     this.cookieService.set('username', loginResult.username, expirationDate);
+    if (loginResult.userPhoto)
+      localStorage.setItem('userPhoto', loginResult.userPhoto);
   }
 
   setLogoutState(): void {
     this.loginResult.isLoggedIn = false;
     this.cookieService.delete('sessionId');
     this.cookieService.delete('username');
+    localStorage.removeItem('userPhoto');
   }
 
   private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
