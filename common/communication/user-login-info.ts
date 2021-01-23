@@ -7,5 +7,5 @@ export interface LoginResult {
     isLoggedIn: boolean;
     sessionId: string;
     username: string;
-    userPhoto?: string
+    userPhoto?: string;
 }

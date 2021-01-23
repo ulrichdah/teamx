@@ -1,4 +1,4 @@
-import { Course } from "./course";
+import { Course } from './course';
 
 export interface User {
     _id?: string;
@@ -11,7 +11,7 @@ export interface User {
     password: string;
     email: string;
     facebook: string;
-    courses: UserCourse[]
+    courses: UserCourse[];
 }
 
 export interface UserCourse extends Course {
