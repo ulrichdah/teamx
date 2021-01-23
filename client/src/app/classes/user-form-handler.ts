@@ -51,6 +51,7 @@ export class UserFormHandler {
         this.form.get('firstName')?.setValue(user.firstName);
         this.form.get('lastName')?.setValue(user.lastName);
         this.form.get('username')?.setValue(user.username);
+        this.form.get('userPhoto')?.setValue(user.userPhoto);
         this.form.get('password')?.setValue(user.password);
         this.form.get('confirmPassword')?.setValue(user.password);
         this.form.get('email')?.setValue(user.email);

@@ -33,9 +33,9 @@ export class LoginComponent implements OnInit {
 
     this.loginService.login(this.loginForm.value as UserLoginInfo).subscribe((result: LoginResult) => {
       this.isPending = false;
-      this.loginFailed = !result.isLoggedIn;
+      this.loginFailed = !(result && result.isLoggedIn);
 
-      if (result.isLoggedIn) {
+      if (!this.loginFailed) {
         this.loginService.setLoginState(result);
 
         this.router.navigate(['home']);
