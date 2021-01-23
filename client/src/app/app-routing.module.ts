@@ -7,12 +7,13 @@ import { NewCourseCreationComponent } from './components/new-course-creation/new
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UserRegistrationComponent } from './components/user-registration/user-registration.component';
 import { AuthGuardService } from './services/auth-guard.service';
+import { CanDeactivateGuardService } from './services/can-deactivate-guard.service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full'},
   { path: 'login', component: LoginComponent },
   { path: 'registration', component: UserRegistrationComponent },
-  { path: 'user-profile/:username', component: UserProfileComponent, canActivate: [AuthGuardService] },
+  { path: 'user-profile/:username', component: UserProfileComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateGuardService] },
   { path: 'home', component: MainPageComponent, canActivate: [AuthGuardService] },
   { path: 'course-list/:courseId', component: CourseListComponent },
   { path: 'course-creation', component: NewCourseCreationComponent },

@@ -66,8 +66,9 @@ export class ToolBarComponent {
   itemButtonClick(id: MenuItemID): void {
     switch(id) {
       case MenuItemID.LOGOUT:
-        this.loginService.setLogoutState();
-        this.router.navigate(['login']);
+        this.router.navigate(['login']).then((confirmed) => {
+          if (confirmed) this.loginService.setLogoutState();
+        });
         break;
       case MenuItemID.PROFILE:
         this.router.navigate(['user-profile/', this.loginService.loginResult.username]);

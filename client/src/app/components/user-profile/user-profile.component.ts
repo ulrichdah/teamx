@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AccountType } from 'src/app/classes/constants';
 import { UserFormHandler } from 'src/app/classes/user-form-handler';
 import { User } from '../../../../../common/communication/users';
+import { ComponentCanDeactivate } from '../../classes/component-can-deactivate';
 import { UserProfileService } from '../../services/user-profile.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { UserProfileService } from '../../services/user-profile.service';
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.scss']
 })
-export class UserProfileComponent implements OnInit {
+export class UserProfileComponent extends ComponentCanDeactivate implements OnInit {
 
   userFormHandler: UserFormHandler;
   initUserInfo: User;
@@ -19,7 +20,9 @@ export class UserProfileComponent implements OnInit {
   isEditing: boolean;
   accounts: string[] = [AccountType.ALONE, AccountType.INCOMPLETE_TEAM];
 
-  constructor(private route: ActivatedRoute, private userProfileService: UserProfileService, private fb: FormBuilder) { }
+  constructor(private route: ActivatedRoute, private userProfileService: UserProfileService, private fb: FormBuilder) {
+    super();
+  }
 
   ngOnInit(): void {
     this.userFormHandler = new UserFormHandler(this.fb);

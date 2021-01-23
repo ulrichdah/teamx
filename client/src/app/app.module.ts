@@ -23,9 +23,10 @@ import { LoginComponent } from './components/login/login.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import { NewCourseCreationComponent } from './components/new-course-creation/new-course-creation.component';
 import { ToolBarComponent } from './components/tool-bar/tool-bar.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UserRegistrationComponent } from './components/user-registration/user-registration.component';
 import { AuthGuardService } from './services/auth-guard.service';
-import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { CanDeactivateGuardService } from './services/can-deactivate-guard.service';
 
 @NgModule({
     declarations: [
@@ -59,7 +60,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
         MatProgressSpinnerModule,
         MatMenuModule,
     ],
-    providers: [AuthGuardService],
+    providers: [AuthGuardService, CanDeactivateGuardService],
     bootstrap: [AppComponent],
 })
 export class AppModule { }
