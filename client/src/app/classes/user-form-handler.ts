@@ -1,18 +1,16 @@
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
 import { AccountType, MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH, MIN_PASSWORD_LENGTH, MIN_USERNAME_LENGTH } from 'src/app/classes/constants';
 import { User, UserCourse } from '../../../../common/communication/users';
 
 export class UserFormHandler {
 
     form: FormGroup;
-    courseOptions: string[] = [
+    acronyms: string[] = [
         'Mary',
         'Shelley',
         'Igor'
     ];
-    filteredOptions: Observable<string[]>;
     isExistingUsername: Observable<boolean>;
     hidePassword: boolean = true;
     isPending: boolean = false;
@@ -38,7 +36,6 @@ export class UserFormHandler {
                 availabilities:[''],
             })])
           });
-        this.observeCourseField();
     }
 
     get courses(): FormArray {
@@ -80,7 +77,6 @@ export class UserFormHandler {
             grade:[course ? course.grade : ''],
             availabilities:[course ? course.availabilities : ''],
         }));
-        this.observeCourseField();
     }
 
     deleteCourse(index: number): void {
@@ -111,23 +107,6 @@ export class UserFormHandler {
         return course && course ? course : '';
     }
 
-    private _filter(name: string): string[] {
-        const filterValue = name.toLowerCase();
-        const matchingElements: string[]  = this.courseOptions.filter((option) => option.toLowerCase().indexOf(filterValue) === 0);
-        return matchingElements;
-    }
-
-    private observeCourseField(): void {
-        const acronymField = this.courses.at(this.courses.length - 1).get('acronym');
-        if (acronymField){
-        this.filteredOptions = acronymField.valueChanges
-            .pipe(
-            startWith(''),
-            map((value) => typeof value === 'string' ? value : ''),
-            map((name) => name ? this._filter(name) : this.courseOptions.slice())
-            );
-        }
-    }
     private addExistingCourses(courses: UserCourse[]): void {
         this.courses.clear();
         for (const course of courses) {

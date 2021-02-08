@@ -10,7 +10,7 @@
   
           <mat-form-field class="full-width">
             <mat-label>Choisir le type de compte</mat-label>
-            <mat-select formControlName="accountType" (selectionChange)="onSelectionChange($event.value)" required>
+            <mat-select formControlName="accountType" (selectionChange)="onAccountTypeChange($event.value)" required>
               <mat-option [value]="account" *ngFor="let account of accounts">{{account}}
               </mat-option>
             </mat-select>
@@ -133,12 +133,11 @@
           <div formArrayName="courses" class="courses">
               <div *ngFor="let item of registrationFormHandler.courses.controls; let courseIndex=index" [formGroupName]="courseIndex">
                 <mat-form-field class="full-width">
-                  <input matInput formControlName="acronym" [matAutocomplete]="auto" placeholder="Identifiant cours" required>
-                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="registrationFormHandler.displayFn">
-                  <mat-option *ngFor="let option of registrationFormHandler.filteredOptions | async" [value]="option">
-                      {{option}}
-                  </mat-option>
-                  </mat-autocomplete>
+                  <mat-label>Choisir l'identifiant du cours</mat-label>
+                  <mat-select formControlName="acronym" required>
+                    <mat-option [value]="acronym" *ngFor="let acronym of registrationFormHandler.acronyms">{{acronym}}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
                 <div *ngIf="registrationFormHandler.isFieldInvalid('courses', 'acronym', courseIndex)">
                   <small class="error-text">

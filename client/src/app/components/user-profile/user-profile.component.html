@@ -141,12 +141,11 @@
           <div formArrayName="courses" class="courses">
               <div *ngFor="let item of userFormHandler.courses.controls; let courseIndex=index" [formGroupName]="courseIndex">
                 <mat-form-field class="full-width">
-                  <input matInput formControlName="acronym" [matAutocomplete]="auto" placeholder="Identifiant cours" required>
-                  <mat-autocomplete #auto="matAutocomplete" [displayWith]="userFormHandler.displayFn">
-                  <mat-option *ngFor="let option of userFormHandler.filteredOptions | async" [value]="option">
-                      {{option}}
-                  </mat-option>
-                  </mat-autocomplete>
+                  <mat-label>Choisir le sigle du cours</mat-label>
+                  <mat-select formControlName="acronym" required>
+                    <mat-option [value]="acronym" *ngFor="let acronym of userFormHandler.acronyms">{{acronym}}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
                 <div *ngIf="userFormHandler.isFieldInvalid('courses', 'acronym', courseIndex)">
                   <small class="error-text">

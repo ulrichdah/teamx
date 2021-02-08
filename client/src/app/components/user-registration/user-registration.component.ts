@@ -39,7 +39,7 @@ export class UserRegistrationComponent implements OnInit {
     this.userRegistrationService.isExistingUsername(this.registrationFormHandler.form.get('username')?.value);
   }
 
-  onSelectionChange(value: string): void {
+  onAccountTypeChange(value: string): void {
     this.registrationFormHandler.accountTypeState(value);
   }
 
