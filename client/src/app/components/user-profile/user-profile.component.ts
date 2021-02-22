@@ -21,7 +21,8 @@ export class UserProfileComponent extends ComponentCanDeactivate implements OnIn
   isEditing: boolean;
   accounts: string[] = [AccountType.ALONE, AccountType.INCOMPLETE_TEAM];
 
-  constructor(private route: ActivatedRoute, private userProfileService: UserProfileService, private fb: FormBuilder) {
+  constructor(private route: ActivatedRoute, private userProfileService: UserProfileService,
+    private fb: FormBuilder, private loginService: LoginService) {
     super();
   }
 
