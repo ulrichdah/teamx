@@ -1,29 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { User } from '../../../../common/communication/users';
+import { HttpRequestService } from './http-request.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserProfileService {
+export class UserProfileService extends HttpRequestService {
 
-  private readonly BASE_URL: string = 'http://localhost:3000/api/user-persistence';
+  private readonly PATH: string = this.BASE_URL + '/user-persistence';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    super();
+  }
 
   getUser(username: string): Observable<User> {
-    return this.http.get<User>(this.BASE_URL + '/getUser/' + username).pipe(catchError(this.handleError<User>('Get for user information')));
+    return this.http.get<User>(this.PATH + '/getUser' + username).pipe(catchError(this.handleError<User>('Get for user information')));
   }
 
   updateInfo(newInfo: User): Observable<boolean> {
-    return this.http.patch<boolean>(this.BASE_URL + '/updateUser', newInfo).pipe(catchError(this.handleError<boolean>('Update user information')));
-  }
-
-  private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
-    return (error: Error): Observable<T> => {
-        return of(result as T);
-    };
+    return this.http.patch<boolean>(this.PATH + '/updateUser', newInfo).pipe(catchError(this.handleError<boolean>('Update user information')));
   }
 }
