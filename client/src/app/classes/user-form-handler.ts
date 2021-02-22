@@ -7,9 +7,9 @@ export class UserFormHandler {
 
     form: FormGroup;
     acronyms: string[] = [
-        'Mary',
-        'Shelley',
-        'Igor'
+        'LOG2990',
+        'INF1600',
+        'INF1995'
     ];
     isExistingUsername: Observable<boolean>;
     hidePassword: boolean = true;

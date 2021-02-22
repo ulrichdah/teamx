@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AccountType } from 'src/app/classes/constants';
 import { UserFormHandler } from 'src/app/classes/user-form-handler';
+import { LoginService } from 'src/app/services/login.service';
 import { User } from '../../../../../common/communication/users';
 import { ComponentCanDeactivate } from '../../classes/component-can-deactivate';
 import { UserProfileService } from '../../services/user-profile.service';
@@ -74,8 +75,10 @@ export class UserProfileComponent extends ComponentCanDeactivate implements OnIn
 
   onSubmit(): void {
     delete this.userFormHandler.form.value.confirmPassword;
+    const updatedUser: User =  this.userFormHandler.form.value;
+    updatedUser._id = this.loginService.loginResult.sessionId;
     this.userFormHandler.isPending = true;
-    this.userProfileService.updateInfo(this.userFormHandler.form.value).subscribe((success: boolean) => {
+    this.userProfileService.updateInfo(updatedUser).subscribe((success: boolean) => {
       this.userFormHandler.isPending = false;
       this.userFormHandler.retryRequest = !success;
       if (success){
