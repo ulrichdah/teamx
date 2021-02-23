@@ -1,0 +1,63 @@
+<div class="container">
+    <div>
+        <h1 class="header-item"> {{currentCourse?.title}} </h1>
+    </div>
+    <mat-tab-group mat-align-tabs="start" dynamicHeight>
+        <mat-tab label="Personnes seules">
+            <div fxLayout="row wrap" fxLayoutGap="16px grid">
+                <div fxFlex="33%" fxFlex.xs="100%" fxFlex.sm="33%"*ngFor="let user of usersAlone; let i = index" class="student-card">
+                    <mat-card>
+                        <mat-card-header>
+                        <div mat-card-avatar class="example-header-image"></div>
+                        <mat-card-title>{{ user.username }}</mat-card-title>
+                        <mat-card-subtitle>{{ user.firstName }} {{ user.lastName }}</mat-card-subtitle>
+                        </mat-card-header>
+                        <img mat-card-image src={{user.userPhoto}}>
+                        <mat-card-content>
+                        <p>
+                            <b>Expériences en rapport au cours:</b> {{ user.courses[0].experiences }} <br/><br/>
+                            <b>Objectifs dans ce cours:</b> {{ user.courses[0].goals }} <br/><br/>
+                            <b>Note minimale espérée:</b> {{ user.courses[0].grade }} <br/><br/>
+                            <b>Disponibilité pour travailler sur ce cours:</b> {{ user.courses[0].availabilities }} <br/><br/>
+                        </p>
+                        </mat-card-content>
+                        <mat-card-actions>
+                        <button mat-button>LIKE</button>
+                        <button mat-button>SHARE</button>
+                        </mat-card-actions>
+                    </mat-card>
+                    <br *ngIf="i%4==0"/>
+                </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Groupes incomplets">
+            <div fxLayout="row wrap" fxLayoutGap="16px grid">
+                <div fxFlex="33%" fxFlex.xs="100%" fxFlex.sm="33%"*ngFor="let user of usersIncompleteTeam; let i = index" class="student-card">
+                    <mat-card>
+                        <mat-card-header>
+                        <div mat-card-avatar class="example-header-image"></div>
+                        <mat-card-title>{{ user.username }}</mat-card-title>
+                        <mat-card-subtitle>{{ user.teamName }}</mat-card-subtitle>
+                        </mat-card-header>
+                        <img mat-card-image src={{user.userPhoto}}>
+                        <mat-card-content>
+                        <p>
+                            <b>Expériences en rapport au cours:</b> {{ user.courses[0].experiences }} <br/><br/>
+                            <b>Objectifs dans ce cours:</b> {{ user.courses[0].goals }} <br/><br/>
+                            <b>Note minimale espérée:</b> {{ user.courses[0].grade }} <br/><br/>
+                            <b>Disponibilité pour travailler sur ce cours:</b> {{ user.courses[0].availabilities }} <br/><br/>
+                        </p>
+                        </mat-card-content>
+                        <mat-card-actions>
+                        <button mat-button>LIKE</button>
+                        <button mat-button>SHARE</button>
+                        </mat-card-actions>
+                    </mat-card>
+                    <br *ngIf="i%4==0"/>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+
+</div>
