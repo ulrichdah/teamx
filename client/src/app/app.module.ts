@@ -18,10 +18,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
+import { CourseCreationComponent } from './components/course-creation/course-creation.component';
 import { CourseViewComponent } from './components/course-view/course-view.component';
 import { LoginComponent } from './components/login/login.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
-import { NewCourseCreationComponent } from './components/new-course-creation/new-course-creation.component';
 import { ToolBarComponent } from './components/tool-bar/tool-bar.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UserRegistrationComponent } from './components/user-registration/user-registration.component';
@@ -32,7 +32,7 @@ import { CanDeactivateGuardService } from './services/can-deactivate-guard.servi
     declarations: [
         AppComponent,
         MainPageComponent,
-        NewCourseCreationComponent,
+        CourseCreationComponent,
         CourseViewComponent,
         LoginComponent,
         UserRegistrationComponent,
