@@ -15,8 +15,8 @@ const routes: Routes = [
   { path: 'registration', component: UserRegistrationComponent },
   { path: 'user-profile/:username', component: UserProfileComponent, canActivate: [AuthGuardService], canDeactivate: [CanDeactivateGuardService] },
   { path: 'home', component: MainPageComponent, canActivate: [AuthGuardService] },
-  { path: 'course-list/:courseId', component: CourseViewComponent },
-  { path: 'course-creation', component: CourseCreationComponent },
+  { path: 'course-list/:courseId', component: CourseViewComponent, canActivate: [AuthGuardService] },
+  { path: 'course-creation', component: CourseCreationComponent, canActivate: [AuthGuardService] },
 ];
 
 @NgModule({
