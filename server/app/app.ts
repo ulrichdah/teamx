@@ -4,6 +4,7 @@ import * as cors from 'cors';
 import * as express from 'express';
 import { inject, injectable } from 'inversify';
 import * as logger from 'morgan';
+import { CoursePersistenceController } from './controllers/course-persistence.controller';
 import { UserPersistenceController } from './controllers/user-persistence.controller';
 import Types from './types';
 
@@ -12,7 +13,8 @@ export class Application {
     private readonly internalError: number = 500;
     app: express.Application;
 
-    constructor(@inject(Types.UserPersistenceController) private userPersistenceController: UserPersistenceController) {
+    constructor(@inject(Types.UserPersistenceController) private userPersistenceController: UserPersistenceController,
+    @inject(Types.CoursePersistenceController) private coursePersistenceController: CoursePersistenceController) {
         this.app = express();
 
         this.config();
@@ -33,6 +35,7 @@ export class Application {
     bindRoutes(): void {
         // Notre application utilise le routeur de notre API `Index`
         this.app.use('/api/user-persistence', this.userPersistenceController.router);
+        this.app.use('/api/course-persistence', this.coursePersistenceController.router);
         this.errorHandling();
     }
 
