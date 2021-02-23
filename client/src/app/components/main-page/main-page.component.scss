@@ -8,7 +8,6 @@
 }
 
 .button {
-    margin-top: 10px;
     text-align: center;
 }
 
@@ -38,7 +37,22 @@
     height: 100px;
 }
 
+.text {
+    margin: auto;
+    margin-top: 20px;
+    color: dimgray;
+    font-style: oblique;
+}
+
 .buttonDiv {
-    margin-top: 10%;
-    margin-right: 50%;
+    margin: auto;
+    margin-top: 5px;
+}
+
+.enterButton {
+    margin-left: 10px;
+}
+
+.error-text {
+	color: red;
 }

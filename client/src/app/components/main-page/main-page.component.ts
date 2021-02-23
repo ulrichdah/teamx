@@ -3,10 +3,7 @@ import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-
-export interface User {
-  name: string;
-}
+import { CourseViewService } from '../../services/course-view.service';
 
 @Component({
   selector: 'app-main-page',
@@ -18,57 +15,51 @@ export class MainPageComponent implements OnInit {
 
   value: string;
   myControl: FormControl = new FormControl();
-  options: User[] = [
-    {name: 'Mary'},
-    {name: 'Shelley'},
-    {name: 'Igor'}
+  acronyms: string[] = [
+    'LOG2990',
+    'INF1600',
+    'INF1995'
   ];
-  filteredOptions: Observable<User[]>;
-  addNewClass: boolean = false;
+  filteredOptions: Observable<string[]>;
+  isExistingCourse: boolean = true;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private courseViewService: CourseViewService) {}
 
   ngOnInit(): void {
     this.filteredOptions = this.myControl.valueChanges
       .pipe(
         startWith(''),
-        map((value) => typeof value === 'string' ? value : value.name),
-        map((name) => name ? this._filter(name) : this.options.slice())
+        map((acronym) => acronym ? this._filter(acronym) : this.acronyms.slice())
       );
+    this.getAcronyms();
   }
 
   onEnter(value: string): void {
+    this.isExistingCourse = this.acronyms.includes(value);
+    if (!this.isExistingCourse) return;
     this.router.navigate(['course-list/'+ value]);
   }
 
-  displayFn(user: User): string {
-    return user && user.name ? user.name : '';
+  displayFn(user: string): string {
+    return user ? user : '';
   }
 
-  private _filter(name: string): User[] {
+  private getAcronyms(): void {
+    this.courseViewService.refreshExistingCourses();
+    if(!this.courseViewService.existingCourses) return;
+    this.acronyms = [];
+    for (const course of this.courseViewService.existingCourses) {
+      this.acronyms.push(course.acronym);
+    }
+  }
+
+  private _filter(name: string): string[] {
+    // make sure we are using the latest version (in case a new course has been added by another user)
+    this.getAcronyms();
+
     const filterValue = name.toLowerCase();
-    const matchingElements: User[]  = this.options.filter((option) => option.name.toLowerCase().indexOf(filterValue) === 0);
-    this.addNewClass = !matchingElements.length;
+    const matchingElements: string[]  = this.acronyms.filter((option) => option.toLowerCase().indexOf(filterValue) === 0);
     return matchingElements;
   }
-
-  // sendTimeToServer(): void {
-  //   const newTimeMessage: Message = {
-  //     title: 'Hello from the client',
-  //     body: 'Time is : ' + new Date().toString()
-  //   };
-  //   // Important de ne pas oublier "subscribe" ou l'appel ne sera jamais lancé puisque personne l'observe
-  //   this.basicService.basicPost(newTimeMessage).subscribe();
-  // }
-
-  // getMessagesFromServer(): void {
-  //   this.basicService.basicGet()
-  //   // Cette étape transforme le Message en un seul string
-  //   .pipe(map((message: Message) => {
-  //     return `${message.title} ${message.body}`;
-  //   })
-  //   )
-  //   .subscribe(this.message);
-  // }
 
 }

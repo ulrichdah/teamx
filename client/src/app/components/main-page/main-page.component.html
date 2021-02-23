@@ -8,14 +8,23 @@
             <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto" #box (keyup.enter)="onEnter(box.value)">
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
             <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                {{option.name}}
+                {{option}}
             </mat-option>
             </mat-autocomplete>
           </mat-form-field>
+          <button mat-raised-button class="enterButton" color="primary" (click)="onEnter(box.value)">Aller</button>
+    </div>
+    <div *ngIf="!isExistingCourse">
+        <small class="error-text">
+            Ce cours n'existe pas !
+        </small>
     </div>
 
+    <span class="text">
+        Votre cours n'hexiste pas? Ajoutez-le.
+    </span>
     <div class="buttonDiv">
-        <button mat-raised-button class="button" color="primary" [disabled]="!addNewClass" [routerLink]="'/course-creation'">Ajouter un nouveau cours</button>
+        <button mat-raised-button class="button" color="accent" [routerLink]="'/course-creation'">Ajouter un nouveau cours</button>
     </div>
     
 
