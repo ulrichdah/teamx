@@ -9,7 +9,7 @@ import { HttpRequestService } from './http-request.service';
 @Injectable({
   providedIn: 'root'
 })
-export class CourseViewService extends HttpRequestService {
+export class CourseService extends HttpRequestService {
 
   existingCourses: Course[];
   private readonly PATH: string = this.BASE_URL + '/course-persistence';
@@ -28,6 +28,16 @@ export class CourseViewService extends HttpRequestService {
   getUsersByCourse(acronym: string): Observable<User[]> {
     return this.http.get<User[]>(this.BASE_URL + '/user-persistence/getUsersByCourse/' + acronym)
     .pipe(catchError(this.handleError<User[]>('Users of course get')));
+  }
+
+  addCourse(course: Course): Observable<boolean> {
+    return this.http.post<boolean>(this.PATH + '/addCourse', course)
+    .pipe(catchError(this.handleError<boolean>('Course creation post')));
+  }
+
+  isExistingAcronym(acronym: string): Observable<boolean> {
+    return this.http.post<boolean>(this.PATH + '/acronym-existence', {acronym})
+    .pipe(catchError(this.handleError<boolean>('Acronym existence verification post')));
   }
 
   private getExistingCourses(): Observable<Course[]> {
