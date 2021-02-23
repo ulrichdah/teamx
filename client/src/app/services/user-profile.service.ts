@@ -17,7 +17,7 @@ export class UserProfileService extends HttpRequestService {
   }
 
   getUser(username: string): Observable<User> {
-    return this.http.get<User>(this.PATH + '/getUser' + username).pipe(catchError(this.handleError<User>('Get for user information')));
+    return this.http.get<User>(this.PATH + '/getUser/' + username).pipe(catchError(this.handleError<User>('Get for user information')));
   }
 
   updateInfo(newInfo: User): Observable<boolean> {

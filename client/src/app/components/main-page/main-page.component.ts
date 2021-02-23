@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { CourseViewService } from '../../services/course-view.service';
+import { CourseService } from '../../services/course.service';
 
 @Component({
   selector: 'app-main-page',
@@ -23,7 +23,7 @@ export class MainPageComponent implements OnInit {
   filteredOptions: Observable<string[]>;
   isExistingCourse: boolean = true;
 
-  constructor(private router: Router, private courseViewService: CourseViewService) {}
+  constructor(private router: Router, private courseService: CourseService) {}
 
   ngOnInit(): void {
     this.filteredOptions = this.myControl.valueChanges
@@ -45,10 +45,10 @@ export class MainPageComponent implements OnInit {
   }
 
   private getAcronyms(): void {
-    this.courseViewService.refreshExistingCourses();
-    if(!this.courseViewService.existingCourses) return;
+    this.courseService.refreshExistingCourses();
+    if(!this.courseService.existingCourses) return;
     this.acronyms = [];
-    for (const course of this.courseViewService.existingCourses) {
+    for (const course of this.courseService.existingCourses) {
       this.acronyms.push(course.acronym);
     }
   }

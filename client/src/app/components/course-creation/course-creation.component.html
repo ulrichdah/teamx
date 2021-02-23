@@ -1,1 +1,47 @@
-<p>new-course-creation works!</p>
+<div class="general-info-wrapper" fxLayout="row" fxLayoutAlign="center center">
+    <mat-card class="box">
+        <mat-card-header>
+            <mat-card-title>Ajout d'un nouveau cours</mat-card-title>
+        </mat-card-header>
+  
+        <form class="form" [formGroup]="courseCreationForm">
+  
+            <mat-card-content>            
+  
+                <mat-form-field class="full-width">
+                    <input matInput formControlName="acronym" placeholder="Sigle du cours" required (ngModelChange)="onAcronymChange()">
+                </mat-form-field>
+                <div *ngIf="courseCreationForm.get('acronym')?.errors && (courseCreationForm.get('acronym')?.dirty || courseCreationForm.get('acronym')?.touched)">
+                    <small class="error-text">
+                        Indiquer un sigle de cours valide (3 lettres suivis de 4 chiffres et possiblement une lettre ex: INF1600 ou INF6900A)
+                    </small>
+                </div>
+                <div *ngIf="(isExistingAcronym | async)" class="error-text">
+                    <small>
+                        Ce sigle existe déjà 
+                    </small>
+                </div>
+
+                <mat-form-field class="full-width">
+                    <input matInput formControlName="title" placeholder="Titre du cours" required>
+                </mat-form-field>
+                <div *ngIf="courseCreationForm.get('title')?.errors && (courseCreationForm.get('title')?.dirty || courseCreationForm.get('title')?.touched)">
+                    <small class="error-text">
+                        Indiquer le titre du cours
+                    </small>
+                </div>
+
+                <div class="footer">
+                    <div *ngIf="isPending">
+                        <mat-spinner class="spinner"></mat-spinner>
+                    </div>
+    
+                    <button *ngIf="!isPending" mat-raised-button color="primary" class="btn-block"  (click)="onSubmit()" [disabled]="courseCreationForm.invalid">Ajouter</button>
+                    <div *ngIf="retryRequest" class="error-text">
+                        Une erreur est survenue lors de la création du cours, vérifier que le sigle n'existe pas et réessayer!
+                    </div>
+                </div>
+            </mat-card-content>
+        </form>
+    </mat-card>
+</div>

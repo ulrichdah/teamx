@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountType } from 'src/app/classes/constants';
-import { CourseViewService } from 'src/app/services/course-view.service';
+import { CourseService } from 'src/app/services/course.service';
 import { Course } from '../../../../../common/communication/course';
 import { User, UserCourse } from '../../../../../common/communication/users';
 
@@ -24,7 +24,7 @@ export class CourseViewComponent implements OnInit {
     {title: 'string2', name: 'string2', description: 'string2', imageSrc: 'https://material.angular.io/assets/img/examples/shiba2.jp'}
   ];
 
-  constructor(private route: ActivatedRoute, private router: Router, private courseViewService: CourseViewService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private courseService: CourseService) { }
 
   ngOnInit(): void {
     this.initView();
@@ -32,14 +32,14 @@ export class CourseViewComponent implements OnInit {
 
   private initView(): void {
     const courseIdFromRoute = this.route.snapshot.paramMap.get('courseId');
-    this.currentCourse = this.courseViewService.existingCourses.find((course: Course) => {
+    this.currentCourse = this.courseService.existingCourses.find((course: Course) => {
       return course.acronym === courseIdFromRoute;
     });
     if (!this.currentCourse) {
       this.router.navigate(['home']);
       return;
     }
-    this.courseViewService.getUsersByCourse(this.currentCourse.acronym).subscribe((users: User[]) => {
+    this.courseService.getUsersByCourse(this.currentCourse.acronym).subscribe((users: User[]) => {
       for (const user of users) {
         this.removeOtherCourses(user);
       }
