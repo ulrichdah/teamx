@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { inject, injectable } from 'inversify';
+import { Course } from '../../../common/communication/course';
 import { CoursePersistenceService } from '../services/course-persistency.service';
 import Types from '../types';
 
@@ -28,6 +29,20 @@ export class CoursePersistenceController {
                 res.sendStatus(HTTP_STATUS_INTERNAL_ERROR);
             });
             res.send(existingCourses);
+        });
+
+        this.router.post('/acronym-existence', async (req:Request, res: Response, next:NextFunction) => {
+            const isExistingAcronym = await this.coursePersistenceService.doesCourseExist(req.body.acronym).catch((reason) => {
+                console.error('An error occured during the course existence check. Details: ' + reason);
+            });
+            res.send(isExistingAcronym);
+        });
+
+        this.router.post('/addCourse', async (req:Request, res: Response, next:NextFunction) => {
+            const success = await this.coursePersistenceService.addCourse(req.body as Course).catch((reason) => {
+                console.error('An error occured when trying to add a new course. Details: ' + reason);
+            });
+            res.send(success);
         });
     }
 }

@@ -43,7 +43,7 @@ export class UserPersistenceService {
     }
 
     async getUsersByCourseAcronym(acronym: string): Promise<User[]> {
-        const users: User[] = await this.dbCollection.find({courses: {$elemMatch: {courseName: acronym}} }) as User[];
+        const users: User[] = await this.dbCollection.find({courses: {$elemMatch: {acronym}} }) as User[];
         return users;
     }
 
