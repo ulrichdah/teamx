@@ -58,14 +58,32 @@ export class UserPersistenceController {
             }
         });
 
+        this.router.get('/getUsersByCourse/:acronym', async (req:Request, res: Response, next:NextFunction) => {
+            const acronym = req.params.acronym;
+            const users = await this.userPersistenceService.getUsersByCourseAcronym(acronym).catch((reason) => {
+                console.error('An error occured when trying to get users registered to the course ' + acronym + '. Details: ' + reason);
+            });
+            if (users) res.send(users);
+            else {
+                console.error('No user found for course: ' + acronym);
+                res.sendStatus(HTTP_STATUS_INTERNAL_ERROR);
+            }
+        });
+
         this.router.patch('/updateUser', async (req:Request, res: Response, next:NextFunction) => {
             const user: User = req.body;
-            const success = await this.userPersistenceService.updateUser(user).catch((reason) => {
-                console.error('An error occured when trying to update user information for the username: ' + user.username + '. Details: ' + reason);
-            });
-            if (success) res.send(success);
-            else {
-                console.error('No user found with the username: ' + user.username);
+            if (user._id) {
+                const success = await this.userPersistenceService.updateUser(user).catch((reason) => {
+                    console.error('An error occured when trying to update user information for the username: ' +
+                    user.username + '. Details: ' + reason);
+                });
+                if (success) res.send(success);
+                else {
+                    console.error('No user found with the username: ' + user.username);
+                    res.sendStatus(HTTP_STATUS_INTERNAL_ERROR);
+                }
+            } else {
+                console.error('Can\'t update user without _id' + user.username);
                 res.sendStatus(HTTP_STATUS_INTERNAL_ERROR);
             }
         });

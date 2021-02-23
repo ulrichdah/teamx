@@ -10,29 +10,27 @@ import { DatabaseService } from './database.service';
 export class UserPersistenceService {
 
     private dbCollection: DbCollection;
-    private existingUsernames: string[];
 
     constructor(@inject(Types.DatabaseService) db: DatabaseService) {
         this.dbCollection = new DbCollection('users', db);
-        this.existingUsernames = [];
     }
 
     async doesUsernameExist(username: string): Promise<boolean> {
-        if (!this.existingUsernames) this.existingUsernames = await this.getAllUsernames();
-        return this.existingUsernames.includes(username);
+        const existingUsernames = await this.getAllUsernames();
+        return existingUsernames.includes(username);
     }
 
     async addUser(newUser: User): Promise<boolean> {
-        this.existingUsernames.push(newUser.username);
         return await this.dbCollection.insertOne(newUser);
     }
 
     async updateUser(newUser: User): Promise<boolean> {
-        return await this.dbCollection.updateOne(newUser.username, newUser);
+        const id = newUser._id;
+        return await this.dbCollection.updateOne(id, newUser);
     }
 
     async login(userInfo: UserLoginInfo): Promise<LoginResult> {
-        const user = await this.dbCollection.findOne({username: userInfo.username});
+        const user = await this.dbCollection.findOne({username: userInfo.username}) as User;
         if (user?.password === userInfo.password) {
             return { isLoggedIn: true, sessionId: user._id, username: user.username, userPhoto: user.userPhoto} as LoginResult;
         }
@@ -40,12 +38,17 @@ export class UserPersistenceService {
     }
 
     async getUser(username: string): Promise<User | null> {
-        const user = await this.dbCollection.findOne({username});
+        const user = await this.dbCollection.findOne({username}) as User;
         return user;
     }
 
+    async getUsersByCourseAcronym(acronym: string): Promise<User[]> {
+        const users: User[] = await this.dbCollection.find({courses: {$elemMatch: {courseName: acronym}} }) as User[];
+        return users;
+    }
+
     private async getAllUsernames(): Promise<string[]> {
-        const allUsers = await this.dbCollection.find({});
+        const allUsers = await this.dbCollection.find({}) as User[];
         const existingUsernames: string[] = [];
         allUsers.forEach((value: User) => {
             existingUsernames.push(value.username);
