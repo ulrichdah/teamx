@@ -1,5 +1,6 @@
 import { inject } from 'inversify';
 import * as mongodb from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { Course } from '../../../common/communication/course';
 import { User } from '../../../common/communication/users';
 import { DatabaseService } from '../services/database.service';
@@ -23,17 +24,18 @@ export class DbCollection {
     }
 
     // tslint:disable-next-line:no-any
-    async findOne(query: mongodb.FilterQuery<any>): Promise<User | null> {
+    async findOne(query: mongodb.FilterQuery<any>): Promise<User | Course | null> {
         return await this.collection.findOne(query);
     }
 
     // tslint:disable-next-line:no-any
-    async find(query: mongodb.FilterQuery<any>): Promise<User[]> {
-        return (await this.collection.find(query).toArray()) as User[];
+    async find(query: mongodb.FilterQuery<any>): Promise<User[] | Course[]> {
+        return (await this.collection.find(query).toArray());
     }
 
-    async updateOne(username: string, newUser: User): Promise<boolean> {
-        const result = await this.collection.updateOne({username}, {$set: newUser});
+    async updateOne(id: string | undefined, newUser: User): Promise<boolean> {
+        delete newUser._id;
+        const result = await this.collection.updateOne({_id: new ObjectId(id)}, {$set: newUser});
         return result.modifiedCount === 1;
     }
 
