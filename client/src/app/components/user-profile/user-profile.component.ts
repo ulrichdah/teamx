@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AccountType } from 'src/app/classes/constants';
 import { UserFormHandler } from 'src/app/classes/user-form-handler';
+import { CourseService } from 'src/app/services/course.service';
 import { LoginService } from 'src/app/services/login.service';
 import { User } from '../../../../../common/communication/users';
 import { ComponentCanDeactivate } from '../../classes/component-can-deactivate';
@@ -22,12 +23,12 @@ export class UserProfileComponent extends ComponentCanDeactivate implements OnIn
   accounts: string[] = [AccountType.ALONE, AccountType.INCOMPLETE_TEAM];
 
   constructor(private route: ActivatedRoute, private userProfileService: UserProfileService,
-    private fb: FormBuilder, private loginService: LoginService) {
+    private fb: FormBuilder, private loginService: LoginService, private courseService: CourseService) {
     super();
   }
 
   ngOnInit(): void {
-    this.userFormHandler = new UserFormHandler(this.fb);
+    this.userFormHandler = new UserFormHandler(this.fb, this.courseService);
     const username = this.route.snapshot.paramMap.get('username');
     if (!username) return;
 

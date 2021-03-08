@@ -15,11 +15,7 @@ export class MainPageComponent implements OnInit {
 
   value: string;
   myControl: FormControl = new FormControl();
-  acronyms: string[] = [
-    'LOG2990',
-    'INF1600',
-    'INF1995'
-  ];
+  acronyms: string[] = [];
   filteredOptions: Observable<string[]>;
   isExistingCourse: boolean = true;
 

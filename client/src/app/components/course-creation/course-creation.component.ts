@@ -20,7 +20,7 @@ export class CourseCreationComponent implements OnInit {
 
   ngOnInit(): void {
     this.courseCreationForm = this.fb.group({
-      acronym:['', [Validators.required, Validators.pattern(new RegExp('^[A-Z]{3}[\\d]{4}[a-zA-Z]{0,1}$'))]],
+      acronym:['', [Validators.required, Validators.pattern(new RegExp('^[A-Z]{3}[\\d]{4}[A-Z]{0,1}$'))]],
       title: ['', Validators.required]
     });
   }

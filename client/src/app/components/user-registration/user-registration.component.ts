@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AccountType } from 'src/app/classes/constants';
+import { CourseService } from 'src/app/services/course.service';
 import { UserFormHandler } from '../../classes/user-form-handler';
 import { UserRegistrationService } from '../../services/user-registration.service';
 
@@ -16,10 +17,11 @@ export class UserRegistrationComponent implements OnInit {
   registrationFormHandler: UserFormHandler;
   photoName: string = '(Vide)';
 
-  constructor(private fb: FormBuilder, private userRegistrationService: UserRegistrationService, private router: Router) {}
+  constructor(private fb: FormBuilder, private userRegistrationService: UserRegistrationService,
+    private router: Router, private courseService: CourseService) {}
 
   ngOnInit(): void {
-    this.registrationFormHandler = new UserFormHandler(this.fb);
+    this.registrationFormHandler = new UserFormHandler(this.fb, this.courseService);
   }
 
   handleFileInput(files: FileList): void {
