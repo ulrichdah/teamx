@@ -12,7 +12,8 @@
                         <mat-card-title>{{ user.username }}</mat-card-title>
                         <mat-card-subtitle>{{ user.firstName }} {{ user.lastName }}</mat-card-subtitle>
                         </mat-card-header>
-                        <img mat-card-image src={{user.userPhoto}}>
+                        <img *ngIf="user.userPhoto && user.userPhoto !== ''" mat-card-image src={{user.userPhoto}}>
+                        <img *ngIf="!user.userPhoto || user.userPhoto === ''" mat-card-image src="../../../assets/default.png">
                         <mat-card-content>
                         <p>
                             <b>Expériences en rapport au cours:</b> {{ user.courses[0].experiences }} <br/><br/>
@@ -40,7 +41,8 @@
                         <mat-card-title>{{ user.username }}</mat-card-title>
                         <mat-card-subtitle>{{ user.teamName }}</mat-card-subtitle>
                         </mat-card-header>
-                        <img mat-card-image src={{user.userPhoto}}>
+                        <img *ngIf="user.userPhoto && user.userPhoto !== ''" mat-card-image src={{user.userPhoto}}>
+                        <img *ngIf="!user.userPhoto || user.userPhoto === ''" mat-card-image src="../../../assets/default.png">
                         <mat-card-content>
                         <p>
                             <b>Expériences en rapport au cours:</b> {{ user.courses[0].experiences }} <br/><br/>

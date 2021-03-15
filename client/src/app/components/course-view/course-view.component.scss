@@ -16,4 +16,10 @@
     width: auto;
 }
 
+img {
+    object-fit: cover;
+    width:400px;
+    height:400px;
+}
+
 .mat-tab-body-content { overflow: hidden!important}

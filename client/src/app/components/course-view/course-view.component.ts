@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountType } from 'src/app/classes/constants';
 import { CourseService } from 'src/app/services/course.service';
+import { LoginService } from 'src/app/services/login.service';
 import { Course } from '../../../../../common/communication/course';
 import { User, UserCourse } from '../../../../../common/communication/users';
 
@@ -24,7 +25,7 @@ export class CourseViewComponent implements OnInit {
     {title: 'string2', name: 'string2', description: 'string2', imageSrc: 'https://material.angular.io/assets/img/examples/shiba2.jp'}
   ];
 
-  constructor(private route: ActivatedRoute, private router: Router, private courseService: CourseService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private courseService: CourseService, private loginService: LoginService) { }
 
   ngOnInit(): void {
     this.initView();
@@ -32,25 +33,29 @@ export class CourseViewComponent implements OnInit {
 
   private initView(): void {
     const courseIdFromRoute = this.route.snapshot.paramMap.get('courseId');
-    this.currentCourse = this.courseService.existingCourses.find((course: Course) => {
-      return course.acronym === courseIdFromRoute;
-    });
-    if (!this.currentCourse) {
-      this.router.navigate(['home']);
-      return;
-    }
-    this.courseService.getUsersByCourse(this.currentCourse.acronym).subscribe((users: User[]) => {
-      for (const user of users) {
-        this.removeOtherCourses(user);
+    this.courseService.getExistingCourses().subscribe((existingCourses: Course[]) => {
+
+      if (!existingCourses) return;
+      this.currentCourse = existingCourses.find((course: Course) => {
+        return course.acronym === courseIdFromRoute;
+      });
+      if (!this.currentCourse) {
+        this.router.navigate(['home']);
+        return;
       }
-      this.usersAlone = this.filterByAccountType(users, AccountType.ALONE);
-      this.usersIncompleteTeam = this.filterByAccountType(users, AccountType.INCOMPLETE_TEAM);
+      this.courseService.getUsersByCourse(this.currentCourse.acronym).subscribe((users: User[]) => {
+        for (const user of users) {
+          this.removeOtherCourses(user);
+        }
+        this.usersAlone = this.filterByAccountType(users, AccountType.ALONE);
+        this.usersIncompleteTeam = this.filterByAccountType(users, AccountType.INCOMPLETE_TEAM);
+      });
     });
   }
 
   private filterByAccountType(allUsers: User[], accountType: AccountType): User[] {
     return allUsers.filter((user: User) => {
-      return user.accountType === accountType;
+      return user.accountType === accountType && user.username !== this.loginService.loginResult.username;
     });
   }
 
