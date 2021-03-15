@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { Course } from '../../../../../common/communication/course';
 import { CourseService } from '../../services/course.service';
 
 @Component({
@@ -41,18 +42,16 @@ export class MainPageComponent implements OnInit {
   }
 
   private getAcronyms(): void {
-    this.courseService.refreshExistingCourses();
-    if(!this.courseService.existingCourses) return;
-    this.acronyms = [];
-    for (const course of this.courseService.existingCourses) {
-      this.acronyms.push(course.acronym);
-    }
+    this.courseService.getExistingCourses().subscribe((existingCourses: Course[]) => {
+      if(!existingCourses) return;
+      this.acronyms = [];
+      for (const course of existingCourses) {
+        this.acronyms.push(course.acronym);
+      }
+    });
   }
 
   private _filter(name: string): string[] {
-    // make sure we are using the latest version (in case a new course has been added by another user)
-    this.getAcronyms();
-
     const filterValue = name.toLowerCase();
     const matchingElements: string[]  = this.acronyms.filter((option) => option.toLowerCase().indexOf(filterValue) === 0);
     return matchingElements;

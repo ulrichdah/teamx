@@ -11,18 +11,10 @@ import { HttpRequestService } from './http-request.service';
 })
 export class CourseService extends HttpRequestService {
 
-  existingCourses: Course[];
   private readonly PATH: string = this.BASE_URL + '/course-persistence';
 
   constructor(private http: HttpClient) {
     super();
-    this.refreshExistingCourses();
-  }
-
-  refreshExistingCourses(): void {
-    this.getExistingCourses().subscribe((extistingCourses) => {
-      this.existingCourses = extistingCourses;
-    });
   }
 
   getUsersByCourse(acronym: string): Observable<User[]> {
@@ -40,7 +32,7 @@ export class CourseService extends HttpRequestService {
     .pipe(catchError(this.handleError<boolean>('Acronym existence verification post')));
   }
 
-  private getExistingCourses(): Observable<Course[]> {
+  getExistingCourses(): Observable<Course[]> {
     return this.http.get<Course[]>(this.PATH + '/getExistingCourses').pipe(catchError(this.handleError<Course[]>('Existing courses get')));
   }
 }

@@ -1,6 +1,7 @@
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AccountType, MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH, MIN_PASSWORD_LENGTH, MIN_USERNAME_LENGTH } from 'src/app/classes/constants';
+import { Course } from '../../../../common/communication/course';
 import { User, UserCourse } from '../../../../common/communication/users';
 import { CourseService } from '../services/course.service';
 
@@ -113,11 +114,12 @@ export class UserFormHandler {
     }
 
     private getAcronyms(): void {
-        this.courseService.refreshExistingCourses();
-        if(!this.courseService.existingCourses) return;
-        this.acronyms = [];
-        for (const course of this.courseService.existingCourses) {
-            this.acronyms.push(course.acronym);
-        }
+        this.courseService.getExistingCourses().subscribe((existingCourses: Course[]) => {
+            if(!existingCourses) return;
+            this.acronyms = [];
+            for (const course of existingCourses) {
+                this.acronyms.push(course.acronym);
+            }
+        });
     }
 }
