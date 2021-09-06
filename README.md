@@ -14,6 +14,6 @@ To launch the app just run: `npm start` in both of the folders `client` and `ser
 
 ## Unit test executiom
 
--   Run `npm run test` to launch the unit tests
+-   Run `npm run test` to launch the unit tests.
 
--   Run `npm run coverage` to generate the coverage
+-   Run `npm run coverage` to generate the coverage.
